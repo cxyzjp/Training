@@ -96,7 +96,7 @@ public class MyLoader extends ClassLoader{
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-    }
+    	}
 	
 	/**
 	 * 加密class文件
