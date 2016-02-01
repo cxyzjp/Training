@@ -44,4 +44,3 @@ test constructor
 person MyClass
 myclass constructor
 
-
