@@ -33,3 +33,15 @@ class MyClass extends Test {
         System.out.println("myclass constructor");
     }
 }
+
+
+System.out:
+test static
+myclass static
+person static
+person Test
+test constructor
+person MyClass
+myclass constructor
+
+
