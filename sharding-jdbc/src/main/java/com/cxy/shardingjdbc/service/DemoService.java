@@ -1,66 +1,53 @@
-package com.cxy.shardingjdbc;
+package com.cxy.shardingjdbc.service;
 
 import com.cxy.shardingjdbc.entity.Order;
 import com.cxy.shardingjdbc.entity.OrderItem;
 import com.cxy.shardingjdbc.repository.OrderItemRepository;
 import com.cxy.shardingjdbc.repository.OrderRepository;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
 import java.util.List;
 
-@RunWith(SpringRunner.class)
-@SpringBootTest
-public class ShardingJdbcApplicationTests {
+@Service
+public class DemoService {
 
     @Resource
     private OrderRepository orderRepository;
+
     @Resource
     private OrderItemRepository orderItemRepository;
 
-    @Test
-    public void contextLoads() {
-        System.out.println("hello world");
-    }
-
-    @Test
-    public void create() {
+    public void demo() {
         orderRepository.createIfNotExistsTable();
         orderItemRepository.createIfNotExistsTable();
         orderRepository.truncateTable();
         orderItemRepository.truncateTable();
-        System.out.println("create success");
-    }
-
-    @Test
-    public void insert() {
         List<Long> orderIds = new ArrayList<>(10);
+        System.out.println("1.Insert--------------");
         for (int i = 0; i < 10; i++) {
             Order order = new Order();
-            order.setUserId(i);
-            order.setStatus("INSERT_ORDER");
+            order.setUserId(51);
+            order.setStatus("INSERT_TEST");
             orderRepository.insert(order);
             long orderId = order.getOrderId();
             orderIds.add(orderId);
 
             OrderItem item = new OrderItem();
             item.setOrderId(orderId);
-            item.setUserId(i);
+            item.setUserId(51);
             item.setStatus("INSERT_TEST");
             orderItemRepository.insert(item);
         }
-        System.out.println(orderIds);
         System.out.println(orderItemRepository.selectAll());
-    }
-
-    @Test
-    public void drop() {
+        System.out.println("2.Delete--------------");
+        for (Long each : orderIds) {
+            orderRepository.delete(each);
+            orderItemRepository.delete(each);
+        }
+        System.out.println(orderItemRepository.selectAll());
         orderItemRepository.dropTable();
         orderRepository.dropTable();
-        System.out.println("drop success");
     }
 }
