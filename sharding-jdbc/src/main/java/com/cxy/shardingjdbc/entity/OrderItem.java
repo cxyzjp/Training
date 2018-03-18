@@ -10,12 +10,22 @@ public final class OrderItem {
 
     private String status;
 
+    private Integer createTime;
+
     public long getOrderItemId() {
         return orderItemId;
     }
 
     public void setOrderItemId(final long orderItemId) {
         this.orderItemId = orderItemId;
+    }
+
+    public Integer getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Integer createTime) {
+        this.createTime = createTime;
     }
 
     public long getOrderId() {

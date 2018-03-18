@@ -43,6 +43,7 @@ public class ShardingJdbcApplicationTests {
             Order order = new Order();
             order.setUserId(i);
             order.setStatus("INSERT_ORDER");
+            order.setCreateTime(i / 4 + 1);
             orderRepository.insert(order);
             long orderId = order.getOrderId();
             orderIds.add(orderId);
@@ -51,6 +52,7 @@ public class ShardingJdbcApplicationTests {
             item.setOrderId(orderId);
             item.setUserId(i);
             item.setStatus("INSERT_TEST");
+            item.setCreateTime(i / 4 + 1);
             orderItemRepository.insert(item);
         }
         System.out.println(orderIds);

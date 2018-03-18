@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxy.shardingjdbc.repository.OrderRepository">
     <update id="createIfNotExistsTable">
-        CREATE TABLE IF NOT EXISTS t_order (order_id BIGINT AUTO_INCREMENT, user_id INT NOT NULL, status VARCHAR(50), PRIMARY KEY (order_id));
+        CREATE TABLE IF NOT EXISTS t_order (order_id BIGINT AUTO_INCREMENT, user_id INT NOT NULL, status VARCHAR(50), create_time INT, PRIMARY KEY (order_id));
     </update>
 
     <update id="truncateTable">
@@ -15,11 +15,12 @@
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="orderId">
         INSERT INTO t_order (
-          user_id, status
+          user_id, status, create_time
         )
         VALUES (
         #{userId,jdbcType=INTEGER},
-        #{status,jdbcType=VARCHAR}
+        #{status,jdbcType=VARCHAR},
+        #{createTime,jdbcType=INTEGER}
         )
     </insert>
     

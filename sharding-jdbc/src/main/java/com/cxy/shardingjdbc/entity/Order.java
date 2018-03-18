@@ -8,12 +8,22 @@ public final class Order {
 
     private String status;
 
+    private Integer createTime;
+
     public long getOrderId() {
         return orderId;
     }
 
     public void setOrderId(final long orderId) {
         this.orderId = orderId;
+    }
+
+    public Integer getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Integer createTime) {
+        this.createTime = createTime;
     }
 
     public int getUserId() {
