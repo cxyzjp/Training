@@ -4,12 +4,12 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.cxy</groupId>
-	<artifactId>sharding-jdbc</artifactId>
+	<artifactId>springboot-sharding-jdbc</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>jar</packaging>
 
-	<name>sharding-jdbc</name>
-	<description>Demo project for Spring Boot</description>
+	<name>springboot-sharding-jdbc</name>
+	<description>sharding-jdbc for Spring Boot</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>
