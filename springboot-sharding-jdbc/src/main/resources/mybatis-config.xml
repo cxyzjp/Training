@@ -10,5 +10,6 @@
     <mappers>
         <mapper resource="mapper/OrderMapper.xml"/>
         <mapper resource="mapper/OrderItemMapper.xml"/>
+        <mapper resource="mapper/UserMapper.xml"/>
     </mappers>
 </configuration>

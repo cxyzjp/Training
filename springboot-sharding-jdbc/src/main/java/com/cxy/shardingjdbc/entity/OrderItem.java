@@ -12,6 +12,14 @@ public final class OrderItem {
 
     private Integer createTime;
 
+    public OrderItem() {}
+
+    public OrderItem(long orderId, int userId, Integer createTime) {
+        this.orderId = orderId;
+        this.userId = userId;
+        this.createTime = createTime;
+    }
+
     public long getOrderItemId() {
         return orderItemId;
     }

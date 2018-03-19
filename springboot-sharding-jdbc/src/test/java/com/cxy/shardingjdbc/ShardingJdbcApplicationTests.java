@@ -39,24 +39,44 @@ public class ShardingJdbcApplicationTests {
     @Test
     public void insert() {
         List<Long> orderIds = new ArrayList<>(10);
-        for (int i = 0; i < 10; i++) {
-            Order order = new Order();
-            order.setUserId(i);
-            order.setStatus("INSERT_ORDER");
-            order.setCreateTime(i / 4 + 1);
-            orderRepository.insert(order);
-            long orderId = order.getOrderId();
-            orderIds.add(orderId);
 
-            OrderItem item = new OrderItem();
-            item.setOrderId(orderId);
-            item.setUserId(i);
-            item.setStatus("INSERT_TEST");
-            item.setCreateTime(i / 4 + 1);
-            orderItemRepository.insert(item);
-        }
-        System.out.println(orderIds);
+        Order order = new Order(1, 1521428895);
+        orderRepository.insert(order);
+        long orderId = order.getOrderId();
+        orderIds.add(orderId);
+        OrderItem item = new OrderItem(orderId, 1, 1521428895);
+        orderItemRepository.insert(item);
+
+        order = new Order(1, 1524107295);
+        orderRepository.insert(order);
+        orderId = order.getOrderId();
+        orderIds.add(orderId);
+        item = new OrderItem(orderId, 1, 1524107295);
+        orderItemRepository.insert(item);
+
+        order = new Order(1, 1534648095);
+        orderRepository.insert(order);
+        orderId = order.getOrderId();
+        orderIds.add(orderId);
+        item = new OrderItem(orderId, 1, 1534648095);
+        orderItemRepository.insert(item);
+
+        order = new Order(1, 1542596895);
+        orderRepository.insert(order);
+        orderId = order.getOrderId();
+        orderIds.add(orderId);
+        item = new OrderItem(orderId, 1, 1542596895);
+        orderItemRepository.insert(item);
+
+        System.out.println("=================" + orderIds);
         System.out.println(orderItemRepository.selectAll());
+    }
+
+    @Test
+    public void truncate() {
+        orderRepository.truncateTable();
+        orderItemRepository.truncateTable();
+        System.out.println("truncate success");
     }
 
     @Test
@@ -65,4 +85,5 @@ public class ShardingJdbcApplicationTests {
         orderRepository.dropTable();
         System.out.println("drop success");
     }
+
 }

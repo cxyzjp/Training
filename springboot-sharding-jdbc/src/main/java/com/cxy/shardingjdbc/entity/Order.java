@@ -10,6 +10,13 @@ public final class Order {
 
     private Integer createTime;
 
+    public Order() {}
+
+    public Order(int userId, Integer createTime) {
+        this.userId = userId;
+        this.createTime = createTime;
+    }
+
     public long getOrderId() {
         return orderId;
     }
