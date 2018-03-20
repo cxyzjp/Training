@@ -12,35 +12,33 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
 import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-import org.springframework.transaction.annotation.TransactionManagementConfigurer;
 
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(basePackages = "com.cxy.shardingjdbc.mapper.a", sqlSessionTemplateRef = "dsASqlSessionTemplate")
-public class DataSourceAConfig {
+@MapperScan(basePackages = "com.cxy.shardingjdbc.mapper.sharding", sqlSessionTemplateRef = "sqlSessionTemplate")
+public class DataSourceConfig {
 
-    @Bean(name = "dsADataSource")
-    @ConfigurationProperties(prefix = "spring.datasource.dsA")
-    public DataSource testDataSource() {
-        return DataSourceBuilder.create().build();
+    @Bean(name = "dataSource")
+    public DataSource testDataSource(@Qualifier("dataSource") DataSource dataSource) {
+        return dataSource;
     }
 
-    @Bean(name = "dsASqlSessionFactory")
-    public SqlSessionFactory testSqlSessionFactory(@Qualifier("dsADataSource") DataSource dataSource) throws Exception {
+    @Bean(name = "sqlSessionFactory")
+    public SqlSessionFactory testSqlSessionFactory(@Qualifier("dataSource") DataSource dataSource) throws Exception {
         SqlSessionFactoryBean bean = new SqlSessionFactoryBean();
         bean.setDataSource(dataSource);
-        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/a/*.xml"));
+        bean.setMapperLocations(new PathMatchingResourcePatternResolver().getResources("classpath:mapper/sharding/*.xml"));
         return bean.getObject();
     }
 
-    @Bean(name = "dsATransactionManager")
-    public DataSourceTransactionManager testTransactionManager(@Qualifier("dsADataSource") DataSource dataSource) {
+    @Bean(name = "transactionManager")
+    public DataSourceTransactionManager testTransactionManager(@Qualifier("dataSource") DataSource dataSource) {
         return new DataSourceTransactionManager(dataSource);
     }
 
-    @Bean(name = "dsASqlSessionTemplate")
-    public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("dsASqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
+    @Bean(name = "sqlSessionTemplate")
+    public SqlSessionTemplate testSqlSessionTemplate(@Qualifier("sqlSessionFactory") SqlSessionFactory sqlSessionFactory) throws Exception {
         return new SqlSessionTemplate(sqlSessionFactory);
     }
 
