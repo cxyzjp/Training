@@ -2,8 +2,8 @@ package com.cxy.shardingjdbc;
 
 import com.cxy.shardingjdbc.entity.Order;
 import com.cxy.shardingjdbc.entity.OrderItem;
-import com.cxy.shardingjdbc.repository.OrderItemRepository;
-import com.cxy.shardingjdbc.repository.OrderRepository;
+import com.cxy.shardingjdbc.mapper.sharding.OrderItemMapper;
+import com.cxy.shardingjdbc.mapper.sharding.OrderMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -18,9 +18,9 @@ import java.util.List;
 public class ShardingJdbcApplicationTests {
 
     @Resource
-    private OrderRepository orderRepository;
+    private OrderMapper orderRepository;
     @Resource
-    private OrderItemRepository orderItemRepository;
+    private OrderItemMapper orderItemRepository;
 
     @Test
     public void contextLoads() {

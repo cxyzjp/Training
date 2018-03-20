@@ -15,13 +15,13 @@
  * </p>
  */
 
-package com.cxy.shardingjdbc.repository;
+package com.cxy.shardingjdbc.mapper.sharding;
 
 import com.cxy.shardingjdbc.entity.Order;
 import org.apache.ibatis.annotations.Mapper;
 
 @Mapper
-public interface OrderRepository {
+public interface OrderMapper {
 
     void createIfNotExistsTable();
 
