@@ -19,6 +19,13 @@ public class MuliTest {
     private UserBMapper userBMapper;
 
     @Test
+    public void create() {
+        userAMapper.createIfNotExistsTable();
+        userBMapper.createIfNotExistsTable();
+        System.out.println("create success");
+    }
+
+    @Test
     public void insert() {
         User user = new User();
         user.setCreateTime(1);
