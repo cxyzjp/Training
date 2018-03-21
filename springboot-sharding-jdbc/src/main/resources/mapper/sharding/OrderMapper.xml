@@ -1,8 +1,16 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.cxy.shardingjdbc.mapper.sharding.OrderMapper">
+    <resultMap id="baseResultMap" type="com.cxy.shardingjdbc.entity.Order">
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="buyer" property="buyer" jdbcType="INTEGER"/>
+        <result column="seller" property="seller" jdbcType="INTEGER"/>
+        <result column="create_time" property="createTime" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+    
     <update id="createIfNotExistsTable">
-        CREATE TABLE IF NOT EXISTS t_order (order_id BIGINT AUTO_INCREMENT, user_id INT NOT NULL, status VARCHAR(50), create_time INT, PRIMARY KEY (order_id));
+        CREATE TABLE IF NOT EXISTS t_order (order_id BIGINT AUTO_INCREMENT, buyer INT, seller INT, create_time INT, update_time TIMESTAMP, PRIMARY KEY (order_id));
     </update>
 
     <update id="truncateTable">
@@ -14,17 +22,43 @@
     </update>
     
     <insert id="insert" useGeneratedKeys="true" keyProperty="orderId">
-        INSERT INTO t_order (
-          user_id, status, create_time
-        )
+        INSERT INTO t_order (buyer, seller, create_time, update_time)
         VALUES (
-        #{userId,jdbcType=INTEGER},
-        #{status,jdbcType=VARCHAR},
-        #{createTime,jdbcType=INTEGER}
+        #{buyer,jdbcType=INTEGER},
+        #{seller,jdbcType=INTEGER},
+        #{createTime,jdbcType=INTEGER},
+        #{updateTime,jdbcType=TIMESTAMP}
         )
     </insert>
     
     <delete id="delete">
         DELETE FROM t_order WHERE order_id = #{orderId,jdbcType=INTEGER}
     </delete>
+
+    <select id="selectAll" resultMap="baseResultMap" parameterType="com.cxy.shardingjdbc.entity.OrderQuery">
+        SELECT * FROM t_order
+        <where>
+            <if test="orderId != null">
+                and order_id = #{orderId}
+            </if>
+            <if test="buyer != null">
+                and buyer = #{buyer}
+            </if>
+            <if test="seller != null">
+                and seller = #{seller}
+            </if>
+            <if test="cStart != null">
+                and create_time &gt;= #{cStart}
+            </if>
+            <if test="cEnd != null">
+                and create_time &lt;= #{cEnd}
+            </if>
+            <if test="uStart != null">
+                and update_time &gt;= #{uStart}
+            </if>
+            <if test="uEnd != null">
+                and update_time &lt;= #{uEnd}
+            </if>
+        </where>
+    </select>
 </mapper>

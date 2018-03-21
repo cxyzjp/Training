@@ -2,15 +2,18 @@ package com.cxy.shardingjdbc;
 
 import com.cxy.shardingjdbc.entity.Order;
 import com.cxy.shardingjdbc.entity.OrderItem;
+import com.cxy.shardingjdbc.entity.OrderQuery;
 import com.cxy.shardingjdbc.mapper.sharding.OrderItemMapper;
 import com.cxy.shardingjdbc.mapper.sharding.OrderMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @RunWith(SpringRunner.class)
@@ -38,38 +41,13 @@ public class ShardingJdbcApplicationTests {
 
     @Test
     public void insert() {
-        List<Long> orderIds = new ArrayList<>(10);
-
-        Order order = new Order(1, 1521428895);
+        Order order = new Order(1, 101, 1517875200, new Date(1517875200000L));
         orderRepository.insert(order);
-        long orderId = order.getOrderId();
-        orderIds.add(orderId);
-        OrderItem item = new OrderItem(orderId, 1, 1521428895);
-        orderItemRepository.insert(item);
-
-        order = new Order(1, 1524107295);
-        orderRepository.insert(order);
-        orderId = order.getOrderId();
-        orderIds.add(orderId);
-        item = new OrderItem(orderId, 1, 1524107295);
-        orderItemRepository.insert(item);
-
-        order = new Order(1, 1534648095);
-        orderRepository.insert(order);
-        orderId = order.getOrderId();
-        orderIds.add(orderId);
-        item = new OrderItem(orderId, 1, 1534648095);
-        orderItemRepository.insert(item);
-
-        order = new Order(1, 1542596895);
-        orderRepository.insert(order);
-        orderId = order.getOrderId();
-        orderIds.add(orderId);
-        item = new OrderItem(orderId, 1, 1542596895);
-        orderItemRepository.insert(item);
-
-        System.out.println("=================" + orderIds);
-        System.out.println(orderItemRepository.selectAll());
+        long id = order.getOrderId();
+        OrderItem orderItem = new OrderItem(id,1517875200, new Date(1517875200000L));
+        orderItemRepository.insert(orderItem);
+        orderItem = new OrderItem(id,1517875200, new Date(1517875200000L));
+        orderItemRepository.insert(orderItem);
     }
 
     @Test
@@ -84,6 +62,14 @@ public class ShardingJdbcApplicationTests {
         orderItemRepository.dropTable();
         orderRepository.dropTable();
         System.out.println("drop success");
+    }
+
+    @Test
+    public void select(){
+        OrderQuery query = new OrderQuery();
+        query.setcEnd(1);
+
+        orderRepository.selectAll(query);
     }
 
 }

@@ -1,0 +1,32 @@
+package com.cxy.shardingjdbc.sharding;
+
+import io.shardingjdbc.core.api.algorithm.sharding.PreciseShardingValue;
+import io.shardingjdbc.core.api.algorithm.sharding.standard.PreciseShardingAlgorithm;
+
+import java.util.Calendar;
+import java.util.Collection;
+
+public class DatabasePreciseAlgorithm implements PreciseShardingAlgorithm<Integer> {
+
+    @Override
+    public String doSharding(Collection<String> collection, PreciseShardingValue<Integer> preciseShardingValue) {
+        System.out.println("==================== database precise");
+        System.out.println("collection:" + collection.toString() + ",preciseShardingValue:" + preciseShardingValue.toString());
+        for (String name : collection) {
+            int value = preciseShardingValue.getValue();
+            String year = getYear(value);
+            if (name.endsWith(year)) {
+                System.out.println("database name: " + name);
+                return name;
+            }
+        }
+        throw new UnsupportedOperationException();
+    }
+
+    private String getYear(int time) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(time * 1000L);
+        return calendar.get(Calendar.YEAR) + "";
+    }
+
+}

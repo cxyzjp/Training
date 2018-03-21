@@ -6,36 +6,37 @@ import io.shardingjdbc.core.api.algorithm.sharding.standard.PreciseShardingAlgor
 import java.util.Calendar;
 import java.util.Collection;
 
-public class OrderPreciseShardingAlgorithm implements PreciseShardingAlgorithm<Integer> {
+public class OrderTablePreciseAlgorithm implements PreciseShardingAlgorithm<Integer> {
 
     @Override
     public String doSharding(Collection<String> collection, PreciseShardingValue<Integer> preciseShardingValue) {
+        System.out.println("==================== table precise");
         System.out.println("collection:" + collection.toString() + ",preciseShardingValue:" + preciseShardingValue.toString());
         for (String name : collection) {
-            int createTime = preciseShardingValue.getValue();
-            String season = getSeason(createTime);
+            int value = preciseShardingValue.getValue();
+            String season = getSeason(value);
             if (name.endsWith(season)) {
-                System.out.println("return name:" + name);
+                System.out.println("table name:" + name);
                 return name;
             }
         }
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     private String getSeason(int time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time * 1000L);
-        String result = calendar.get(Calendar.YEAR) + "_";
 
         int m = calendar.get(Calendar.MONTH) + 1;
+        String result;
         if (m < 4) {
-            result += 1;
+            result = "1";
         } else if (m < 7) {
-            result += 2;
+            result = "2";
         } else if (m < 10) {
-            result += 3;
+            result = "3";
         } else {
-            result += 4;
+            result = "4";
         }
         return result;
     }

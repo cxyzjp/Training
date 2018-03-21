@@ -1,6 +1,7 @@
 package com.cxy.shardingjdbc.mapper.sharding;
 
 import com.cxy.shardingjdbc.entity.OrderItem;
+import com.cxy.shardingjdbc.entity.OrderQuery;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
@@ -16,7 +17,7 @@ public interface OrderItemMapper {
 
     void delete(Long orderItemId);
 
-    List<OrderItem> selectAll();
+    List<OrderItem> selectAll(OrderQuery query);
 
     void dropTable();
 }

@@ -1,31 +1,36 @@
 package com.cxy.shardingjdbc.entity;
 
+import java.util.Date;
+
 public final class OrderItem {
 
     private long orderItemId;
-
     private long orderId;
-
-    private int userId;
-
-    private String status;
-
     private Integer createTime;
+    private Date updateTime;
 
     public OrderItem() {}
 
-    public OrderItem(long orderId, int userId, Integer createTime) {
+    public OrderItem(long orderId, Integer createTime, Date updateTime) {
         this.orderId = orderId;
-        this.userId = userId;
         this.createTime = createTime;
+        this.updateTime = updateTime;
     }
 
     public long getOrderItemId() {
         return orderItemId;
     }
 
-    public void setOrderItemId(final long orderItemId) {
+    public void setOrderItemId(long orderItemId) {
         this.orderItemId = orderItemId;
+    }
+
+    public long getOrderId() {
+        return orderId;
+    }
+
+    public void setOrderId(long orderId) {
+        this.orderId = orderId;
     }
 
     public Integer getCreateTime() {
@@ -36,32 +41,16 @@ public final class OrderItem {
         this.createTime = createTime;
     }
 
-    public long getOrderId() {
-        return orderId;
+    public Date getUpdateTime() {
+        return updateTime;
     }
 
-    public void setOrderId(final long orderId) {
-        this.orderId = orderId;
-    }
-
-    public int getUserId() {
-        return userId;
-    }
-
-    public void setUserId(final int userId) {
-        this.userId = userId;
-    }
-
-    public String getStatus() {
-        return status;
-    }
-
-    public void setStatus(final String status) {
-        this.status = status;
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
     }
 
     @Override
     public String toString() {
-        return String.format("item_id:%s, order_id: %s, user_id: %s, status: %s", orderItemId, orderId, userId, status);
+        return String.format("item_id:%s, order_id: %s, createTime: %s", orderItemId, orderId, createTime);
     }
 }

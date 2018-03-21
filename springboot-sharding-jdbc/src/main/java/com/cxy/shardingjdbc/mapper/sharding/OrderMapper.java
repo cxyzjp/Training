@@ -18,7 +18,10 @@
 package com.cxy.shardingjdbc.mapper.sharding;
 
 import com.cxy.shardingjdbc.entity.Order;
+import com.cxy.shardingjdbc.entity.OrderQuery;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 @Mapper
 public interface OrderMapper {
@@ -30,6 +33,8 @@ public interface OrderMapper {
     Long insert(Order model);
 
     void delete(Long orderId);
+
+    List<Order> selectAll(OrderQuery query);
 
     void dropTable();
 }
