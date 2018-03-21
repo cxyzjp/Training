@@ -9,12 +9,9 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
-import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -44,9 +41,17 @@ public class ShardingJdbcApplicationTests {
         Order order = new Order(1, 101, 1517875200, new Date(1517875200000L));
         orderRepository.insert(order);
         long id = order.getOrderId();
-        OrderItem orderItem = new OrderItem(id,1517875200, new Date(1517875200000L));
+        OrderItem orderItem = new OrderItem(id, 1517875200, new Date(1517875200000L));
         orderItemRepository.insert(orderItem);
-        orderItem = new OrderItem(id,1517875200, new Date(1517875200000L));
+        orderItem = new OrderItem(id, 1517875200, new Date(1517875200000L));
+        orderItemRepository.insert(orderItem);
+
+        order = new Order(1, 101, 1524327556, new Date(1524327556000L));
+        orderRepository.insert(order);
+        id = order.getOrderId();
+        orderItem = new OrderItem(id, 1524327556, new Date(1524327556000L));
+        orderItemRepository.insert(orderItem);
+        orderItem = new OrderItem(id, 1524327556, new Date(1524327556000L));
         orderItemRepository.insert(orderItem);
     }
 
@@ -65,11 +70,15 @@ public class ShardingJdbcApplicationTests {
     }
 
     @Test
-    public void select(){
+    public void select() {
         OrderQuery query = new OrderQuery();
-        query.setcEnd(1);
-
-        orderRepository.selectAll(query);
+//        query.setCreateTime(1);
+        query.setBuyer(1);
+//        query.setcStart(1517875200);
+//        query.setcEnd(1524327556);
+        query.setuStart(new Date(1517875200000L));
+        query.setuEnd(new Date(1524327556000L));
+        System.out.println(orderRepository.selectAll(query));
     }
 
 }

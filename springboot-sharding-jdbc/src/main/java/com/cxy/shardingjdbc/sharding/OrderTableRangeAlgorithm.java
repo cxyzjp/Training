@@ -13,37 +13,34 @@ public class OrderTableRangeAlgorithm implements RangeShardingAlgorithm<Integer>
     @Override
     public Collection<String> doSharding(Collection<String> collection, RangeShardingValue<Integer> rangeShardingValue) {
         System.out.println("==================== table range");
-        System.out.println("collection:" + collection.toString() + ",rangeShardingValue:" + rangeShardingValue.toString());
         Collection<String> result = new LinkedHashSet<>(collection.size());
         Range<Integer> range = rangeShardingValue.getValueRange();
-        for (Integer i = range.lowerEndpoint(); i <= range.upperEndpoint(); i++) {
+        Integer upperEndpoint = range.upperEndpoint();
+        for (Integer i = range.lowerEndpoint(); i <= upperEndpoint;) {
+            String season = getSeason(i);
             for (String each : collection) {
-                String season = getSeason(i);
                 if (each.endsWith(season)) {
-                    System.out.println("database name: " + each);
                     result.add(each);
                 }
             }
+            i = addSeason(i);
         }
+        // 循环最后一个点
+        String season = getSeason(upperEndpoint);
+        for (String each : collection) {
+            if (each.endsWith(season)) {
+                result.add(each);
+            }
+        }
+        System.out.println("table names: " + result);
         return result;
     }
 
     private String getSeason(int time) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time * 1000L);
-        String result = calendar.get(Calendar.YEAR) + "_";
-
-        int m = calendar.get(Calendar.MONTH) + 1;
-        if (m < 4) {
-            result += 1;
-        } else if (m < 7) {
-            result += 2;
-        } else if (m < 10) {
-            result += 3;
-        } else {
-            result += 4;
-        }
-        return result;
+        return OrderTablePreciseAlgorithm.getSeason(time);
     }
 
+    private int addSeason(int time){
+        return time + 7689600;
+    }
 }

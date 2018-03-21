@@ -47,17 +47,14 @@
             <if test="seller != null">
                 and seller = #{seller}
             </if>
-            <if test="cStart != null">
-                and create_time &gt;= #{cStart}
+            <if test="createTime != null">
+                and create_time = #{createTime}
             </if>
-            <if test="cEnd != null">
-                and create_time &lt;= #{cEnd}
+            <if test="cStart != null">
+                and create_time BETWEEN #{cStart} AND #{cEnd}
             </if>
             <if test="uStart != null">
-                and update_time &gt;= #{uStart}
-            </if>
-            <if test="uEnd != null">
-                and update_time &lt;= #{uEnd}
+                and update_time BETWEEN #{uStart} AND #{uEnd}
             </if>
         </where>
     </select>

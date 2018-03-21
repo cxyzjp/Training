@@ -5,15 +5,16 @@ import io.shardingjdbc.core.api.algorithm.sharding.standard.PreciseShardingAlgor
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 
-public class DatabasePreciseAlgorithm implements PreciseShardingAlgorithm<Integer> {
+public class DatabaseDatePreciseAlgorithm implements PreciseShardingAlgorithm<Date> {
 
     @Override
-    public String doSharding(Collection<String> collection, PreciseShardingValue<Integer> preciseShardingValue) {
+    public String doSharding(Collection<String> collection, PreciseShardingValue<Date> preciseShardingValue) {
         System.out.println("==================== database precise");
         String defaultDS = "";
         for (String name : collection) {
-            int value = preciseShardingValue.getValue();
+            Date value = preciseShardingValue.getValue();
             String year = getYear(value);
             if (name.endsWith(year)) {
                 System.out.println("database name: " + name);
@@ -25,10 +26,9 @@ public class DatabasePreciseAlgorithm implements PreciseShardingAlgorithm<Intege
 //        throw new UnsupportedOperationException();
     }
 
-    private String getYear(int time) {
+    private String getYear(Date time) {
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(time * 1000L);
+        calendar.setTime(time);
         return calendar.get(Calendar.YEAR) + "";
     }
-
 }

@@ -11,7 +11,6 @@ public class OrderTablePreciseAlgorithm implements PreciseShardingAlgorithm<Inte
     @Override
     public String doSharding(Collection<String> collection, PreciseShardingValue<Integer> preciseShardingValue) {
         System.out.println("==================== table precise");
-        System.out.println("collection:" + collection.toString() + ",preciseShardingValue:" + preciseShardingValue.toString());
         for (String name : collection) {
             int value = preciseShardingValue.getValue();
             String season = getSeason(value);
@@ -23,7 +22,7 @@ public class OrderTablePreciseAlgorithm implements PreciseShardingAlgorithm<Inte
         throw new UnsupportedOperationException();
     }
 
-    private String getSeason(int time) {
+    public static String getSeason(int time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time * 1000L);
 

@@ -4,35 +4,44 @@ import java.util.Date;
 
 public class OrderQuery {
 
-    private long orderId;
-    private int buyer;
-    private int seller;
+    private Long orderId;
+    private Integer buyer;
+    private Integer seller;
     private Integer cStart;
     private Integer cEnd;
+    private Integer createTime;
     private Date uStart;
     private Date uEnd;
 
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
 
-    public void setOrderId(long orderId) {
+    public void setOrderId(Long orderId) {
         this.orderId = orderId;
     }
 
-    public int getBuyer() {
+    public Integer getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Integer createTime) {
+        this.createTime = createTime;
+    }
+
+    public Integer getBuyer() {
         return buyer;
     }
 
-    public void setBuyer(int buyer) {
+    public void setBuyer(Integer buyer) {
         this.buyer = buyer;
     }
 
-    public int getSeller() {
+    public Integer getSeller() {
         return seller;
     }
 
-    public void setSeller(int seller) {
+    public void setSeller(Integer seller) {
         this.seller = seller;
     }
 
