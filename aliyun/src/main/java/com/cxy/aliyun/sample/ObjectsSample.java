@@ -1,8 +1,7 @@
 package com.cxy.aliyun.sample;
 
 import com.aliyun.oss.OSS;
-import com.aliyun.oss.model.Bucket;
-import com.aliyun.oss.model.BucketInfo;
+import com.aliyun.oss.model.*;
 import com.cxy.aliyun.config.OSSConfig;
 
 import java.util.List;
@@ -13,13 +12,10 @@ public class ObjectsSample {
         OSS client = OSSConfig.ossClient();
         String bucketName = OSSConfig.bucketName;
 
-        List<Bucket> buckets = client.listBuckets();
-        for (Bucket bucket : buckets) {
-            System.out.println(" - " + bucket.getName());
+        ObjectListing objectListing = client.listObjects(bucketName, "campaign/1803/");
+        for (OSSObjectSummary objectSummary : objectListing.getObjectSummaries()) {
+            System.out.println(objectSummary.getKey()+ " = " +objectSummary.getSize());
         }
-
-        BucketInfo info = client.getBucketInfo(bucketName);
-        System.out.println(info);
     }
 
 }
