@@ -6,6 +6,7 @@ import io.shardingjdbc.core.api.algorithm.sharding.standard.RangeShardingAlgorit
 
 import java.util.Calendar;
 import java.util.Collection;
+import java.util.Date;
 import java.util.LinkedHashSet;
 
 public class OrderTableRangeAlgorithm implements RangeShardingAlgorithm<Integer> {
@@ -15,8 +16,12 @@ public class OrderTableRangeAlgorithm implements RangeShardingAlgorithm<Integer>
         System.out.println("==================== table range");
         Collection<String> result = new LinkedHashSet<>(collection.size());
         Range<Integer> range = rangeShardingValue.getValueRange();
+
+        Integer lowerEndpoint = range.lowerEndpoint();
         Integer upperEndpoint = range.upperEndpoint();
-        for (Integer i = range.lowerEndpoint(); i <= upperEndpoint;) {
+        System.out.println(new Date(lowerEndpoint * 1000L));
+        System.out.println(new Date(upperEndpoint * 1000L));
+        for (Integer i = lowerEndpoint; i <= upperEndpoint;) {
             String season = getSeason(i);
             for (String each : collection) {
                 if (each.endsWith(season)) {

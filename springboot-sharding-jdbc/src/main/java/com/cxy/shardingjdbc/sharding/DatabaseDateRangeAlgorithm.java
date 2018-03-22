@@ -16,36 +16,23 @@ public class DatabaseDateRangeAlgorithm implements RangeShardingAlgorithm<Date> 
         System.out.println("==================== database range");
         Collection<String> result = new LinkedHashSet<>(collection.size());
         Range<Date> range = rangeShardingValue.getValueRange();
-        Date upperEndpoint = range.upperEndpoint();
-        for (Date i = range.lowerEndpoint(); i.before(upperEndpoint);) {
-            String year = getYear(i);
+
+        Integer lowerYear = getYear(range.lowerEndpoint());
+        Integer upperYear = getYear(range.upperEndpoint());
+        for (Integer i = lowerYear; i <= upperYear; i++) {
             for (String each : collection) {
-                if (each.endsWith(year)) {
+                if (each.endsWith(i + "")) {
                     result.add(each);
                 }
-            }
-            i = addYear(i);
-        }
-        // 循环最后一个点
-        String year = getYear(upperEndpoint);
-        for (String each : collection) {
-            if (each.endsWith(year)) {
-                result.add(each);
             }
         }
         System.out.println("database names: " + result);
         return result;
     }
 
-    private String getYear(Date time) {
+    private int getYear(Date time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(time);
-        return calendar.get(Calendar.YEAR) + "";
-    }
-    private Date addYear(Date time){
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(time);
-        calendar.add(Calendar.YEAR, 1);
-        return calendar.getTime();
+        return calendar.get(Calendar.YEAR);
     }
 }

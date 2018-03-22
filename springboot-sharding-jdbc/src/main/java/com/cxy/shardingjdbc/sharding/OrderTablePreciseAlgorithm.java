@@ -22,7 +22,7 @@ public class OrderTablePreciseAlgorithm implements PreciseShardingAlgorithm<Inte
         throw new UnsupportedOperationException();
     }
 
-    public static String getSeason(int time) {
+    static String getSeason(int time) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(time * 1000L);
 
