@@ -1,5 +1,6 @@
 package com.cxy.qcloud.vod;
 
+import com.cxy.qcloud.config.QcloudConfig;
 import com.qcloud.Module.Vod;
 import com.qcloud.QcloudApiModuleCenter;
 import com.qcloud.Utilities.Json.JSONObject;
@@ -12,8 +13,8 @@ public class GetVideoInfo {
 
         /* 如果是循环调用下面举例的接口，需要从此处开始你的循环语句。切记！ */
         TreeMap<String, Object> config = new TreeMap<>();
-        config.put("SecretId", "AKID3DISwQKTs55RbYEOM8h4GF1byMZZLBiD");
-        config.put("SecretKey", "pUwBD3qRq21nNJ9pJcicJpJepqeIm492");
+        config.put("SecretId", QcloudConfig.SecretId);
+        config.put("SecretKey", QcloudConfig.SecretKey);
         /* 请求方法类型 POST、GET */
         config.put("RequestMethod", "GET");
         /* 区域参数，可选: gz:广州; sh:上海; hk:香港; ca:北美;等。 */
