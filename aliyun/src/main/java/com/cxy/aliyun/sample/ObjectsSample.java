@@ -12,7 +12,7 @@ public class ObjectsSample {
         OSS client = OSSConfig.ossClient();
         String bucketName = OSSConfig.bucketName;
 
-        ObjectListing objectListing = client.listObjects(bucketName, "campaign/1803/");
+        ObjectListing objectListing = client.listObjects(bucketName, "campaign/");
         for (OSSObjectSummary objectSummary : objectListing.getObjectSummaries()) {
             System.out.println(objectSummary.getKey()+ " = " +objectSummary.getSize());
         }
