@@ -1,10 +1,10 @@
-package com.cxy.aliyun.sample;
+package com.cxy.aliyun.oss;
 
 import com.aliyun.oss.ClientException;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.OSSException;
 import com.aliyun.oss.model.*;
-import com.cxy.aliyun.config.OSSConfig;
+import com.cxy.aliyun.config.AliConfig;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -16,9 +16,9 @@ public class ListObjectsSample {
 
     public static void main(String[] args) throws IOException {
 
-//        OSS client = OSSConfig.ossClient();
+//        OSS client = AliConfig.ossClient();
         OSS client = null;
-        String bucketName = OSSConfig.bucketName;
+        String bucketName = AliConfig.bucketName;
 
         try {
             final String content = "Hello OSS";
