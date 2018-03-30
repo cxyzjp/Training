@@ -3,7 +3,6 @@ package com.cxy.server;
 import com.cxy.thrift.Hello;
 import com.cxy.thrift.impl.HelloThrift;
 import org.apache.thrift.TMultiplexedProcessor;
-import org.apache.thrift.TProcessor;
 import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.server.TServer;
 import org.apache.thrift.server.TSimpleServer;
@@ -29,5 +28,4 @@ public class MultiplexedServerMain {
             e.printStackTrace();
         }
     }
-
 }
