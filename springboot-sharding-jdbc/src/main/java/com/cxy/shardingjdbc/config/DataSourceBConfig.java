@@ -1,5 +1,6 @@
 package com.cxy.shardingjdbc.config;
 
+import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -21,7 +22,8 @@ public class DataSourceBConfig {
     @Bean(name = "dsbDataSource")
     @ConfigurationProperties(prefix = "spring.datasource.dsb")
     public DataSource testDataSource() {
-        return DataSourceBuilder.create().build();
+//        return DataSourceBuilder.create().build();
+        return DruidDataSourceBuilder.create().build();
     }
 
     @Bean(name = "dsbSqlSessionFactory")
