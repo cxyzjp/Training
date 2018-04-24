@@ -34,6 +34,10 @@ public class MuliTest {
         user = new User();
         user.setCreateTime(2);
         userBMapper.insert(user);
+    }
+
+    @Test
+    public void list() {
         System.out.println(userAMapper.selectAll());
         System.out.println(userBMapper.selectAll());
     }
