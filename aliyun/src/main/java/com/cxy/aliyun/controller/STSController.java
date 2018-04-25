@@ -41,4 +41,13 @@ public class STSController {
         request.setRoleSessionName(AliConfig.m_roleSessionName);
         return client.getAcsResponse(request);
     }
+
+    public static void main(String[] args) {
+        STSController s = new STSController();
+        try {
+            s.getSTS();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 }
