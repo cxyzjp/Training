@@ -1,9 +1,13 @@
-package com.cxy.aliyun.oss;
+package com.cxy.aliyun.controller;
 
 import com.aliyun.oss.common.utils.BinaryUtil;
-import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
-import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -12,56 +16,61 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.net.URI;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
 
-public class CallbackServer {
+@Controller
+@RequestMapping("/oss/callback")
+public class CallbackController {
 
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+    @RequestMapping(method = RequestMethod.GET)
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        doPost(request, response);
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String ossCallbackBody = GetPostBody(request.getInputStream(), Integer.parseInt(request.getHeader("content-length")));
         boolean ret = VerifyOSSCallbackRequest(request, ossCallbackBody);
         System.out.println("verify result:" + ret);
         System.out.println("OSS Callback Body:" + ossCallbackBody);
         if (ret) {
-            response(request, response, "{\"Status\":\"OK\"}", HttpServletResponse.SC_OK);
+            response(request, response, ossCallbackBody, HttpServletResponse.SC_OK);
         } else {
             response(request, response, "{\"Status\":\"verdify not ok\"}", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        System.out.println("用户输入url:" + request.getRequestURI());
-        response(request, response, "input get ", 200);
-
-    }
-
-    public String executeGet(String url) {
+    private String executeGet(String url) {
         BufferedReader in = null;
-
         String content = null;
+        CloseableHttpResponse response1 = null;
         try {
             // 定义HttpClient
-            @SuppressWarnings("resource")
-            DefaultHttpClient client = new DefaultHttpClient();
-            // 实例化HTTP方法
-            HttpGet request = new HttpGet();
-            request.setURI(new URI(url));
-            HttpResponse response = client.execute(request);
+//            DefaultHttpClient client = new DefaultHttpClient();
+//            // 实例化HTTP方法
+//            HttpGet request = new HttpGet();
+//            request.setURI(new URI(url));
+//            HttpResponse response = client.execute(request);
 
-            in = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
-            StringBuffer sb = new StringBuffer("");
-            String line = "";
+            CloseableHttpClient httpclient = HttpClients.createDefault();
+            HttpGet httpGet = new HttpGet(url);
+            response1 = httpclient.execute(httpGet);
+
+            in = new BufferedReader(new InputStreamReader(response1.getEntity().getContent()));
+            StringBuilder sb = new StringBuilder("");
+            String line;
             String NL = System.getProperty("line.separator");
             while ((line = in.readLine()) != null) {
-                sb.append(line + NL);
+                sb.append(line).append(NL);
             }
             in.close();
             content = sb.toString();
         } catch (Exception e) {
+            e.printStackTrace();
         } finally {
             if (in != null) {
                 try {
@@ -70,14 +79,21 @@ public class CallbackServer {
                     e.printStackTrace();
                 }
             }
-            return content;
+            if (response1 != null) {
+                try {
+                    response1.close();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
         }
+        return content;
     }
 
-    public String GetPostBody(InputStream is, int contentLen) {
+    private String GetPostBody(InputStream is, int contentLen) {
         if (contentLen > 0) {
             int readLen = 0;
-            int readLengthThisTime = 0;
+            int readLengthThisTime;
             byte[] message = new byte[contentLen];
             try {
                 while (readLen != contentLen) {
@@ -89,15 +105,14 @@ public class CallbackServer {
                 }
                 return new String(message);
             } catch (IOException e) {
+                e.printStackTrace();
             }
         }
         return "";
     }
 
-
-    protected boolean VerifyOSSCallbackRequest(HttpServletRequest request, String ossCallbackBody) throws NumberFormatException, IOException {
-        boolean ret = false;
-        String autorizationInput = new String(request.getHeader("Authorization"));
+    private boolean VerifyOSSCallbackRequest(HttpServletRequest request, String ossCallbackBody) throws NumberFormatException, IOException {
+        String autorizationInput = request.getHeader("Authorization");
         String pubKeyInput = request.getHeader("x-oss-pub-key-url");
         byte[] authorization = BinaryUtil.fromBase64String(autorizationInput);
         byte[] pubKey = BinaryUtil.fromBase64String(pubKeyInput);
@@ -111,17 +126,15 @@ public class CallbackServer {
         retString = retString.replace("-----END PUBLIC KEY-----", "");
         String queryString = request.getQueryString();
         String uri = request.getRequestURI();
-        String decodeUri = java.net.URLDecoder.decode(uri, "UTF-8");
-        String authStr = decodeUri;
+        String authStr = java.net.URLDecoder.decode(uri, "UTF-8");
         if (queryString != null && !queryString.equals("")) {
             authStr += "?" + queryString;
         }
         authStr += "\n" + ossCallbackBody;
-        ret = doCheck(authStr, authorization, retString);
-        return ret;
+        return doCheck(authStr, authorization, retString);
     }
 
-    public static boolean doCheck(String content, byte[] sign, String publicKey) {
+    private static boolean doCheck(String content, byte[] sign, String publicKey) {
         try {
             KeyFactory keyFactory = KeyFactory.getInstance("RSA");
             byte[] encodedKey = BinaryUtil.fromBase64String(publicKey);
@@ -129,13 +142,10 @@ public class CallbackServer {
             java.security.Signature signature = java.security.Signature.getInstance("MD5withRSA");
             signature.initVerify(pubKey);
             signature.update(content.getBytes());
-            boolean bverify = signature.verify(sign);
-            return bverify;
-
+            return signature.verify(sign);
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         return false;
     }
 

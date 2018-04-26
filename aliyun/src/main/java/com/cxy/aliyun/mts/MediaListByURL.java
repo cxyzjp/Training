@@ -1,7 +1,5 @@
 package com.cxy.aliyun.mts;
 
-import com.aliyun.oss.OSS;
-import com.aliyun.oss.OSSClientBuilder;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.mts.model.v20140618.QueryMediaListByURLRequest;

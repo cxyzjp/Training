@@ -11,17 +11,17 @@ import com.cxy.aliyun.config.AliConfig;
 
 public class StsServiceSample {
     public static void main(String[] args) {
-        String policy = "{\"Version\":\"1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"oss:*\"],\"Resource\":[\"acs:oss:*:*:chuandao-in1\",\"acs:oss:*:*:chuandao-out1\"],\"Condition\":{}}]}";
+        String policy = "{\"Version\":\"1\",\"Statement\":[{\"Effect\":\"Allow\",\"Action\":[\"oss:*\"],\"Resource\":[\"acs:oss:*:*:chuandao01\",\"acs:oss:*:*:chuandao01/*\"],\"Condition\":{}}]}";
         try {
             // Init ACS Client
             DefaultProfile.addEndpoint("", "", "Sts", "sts.aliyuncs.com");
 //            DefaultProfile.addEndpoint(AliConfig.endpoint, AliConfig.region, "Sts", "sts.aliyuncs.com");
-            IClientProfile profile = DefaultProfile.getProfile("", AliConfig.m_accessKeyID, AliConfig.m_accessKeySecret);
+            IClientProfile profile = DefaultProfile.getProfile("", AliConfig.accessKeyId, AliConfig.accessKeySecret);
             DefaultAcsClient client = new DefaultAcsClient(profile);
             final AssumeRoleRequest request = new AssumeRoleRequest();
             request.setMethod(MethodType.POST);
-            request.setRoleArn(AliConfig.m_roleArn);
-            request.setRoleSessionName(AliConfig.m_roleSessionName);
+            request.setRoleArn(AliConfig.roleArn);
+            request.setRoleSessionName(AliConfig.roleSessionName);
             request.setPolicy(policy);
             final AssumeRoleResponse response = client.getAcsResponse(request);
 

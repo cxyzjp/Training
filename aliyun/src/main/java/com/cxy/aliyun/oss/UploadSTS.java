@@ -1,6 +1,6 @@
 package com.cxy.aliyun.oss;
 
-public class ObjectsSTS {
+public class UploadSTS {
 
     public static void main(String[] args) {
 //        String accessKeyId = "STS.G6YE1PqEcR4JgA3nU6W4vtypm";
@@ -9,10 +9,7 @@ public class ObjectsSTS {
 //        OSS client = new OSSClientBuilder().build(AliConfig.endpoint, accessKeyId, accessKeySecret, securityToken);
 //        String bucketName = AliConfig.bucketName;
 //
-//        ObjectListing objectListing = client.listObjects(bucketName, "input/");
-//        for (OSSObjectSummary objectSummary : objectListing.getObjectSummaries()) {
-//            System.out.println(objectSummary.getKey()+ " = " +objectSummary.getSize());
-//        }
+//        client.putObject(bucketName, "input/t1/1.jpg", new File("F:\\1\\1.jpg"));
     }
 
 }
