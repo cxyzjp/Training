@@ -7,6 +7,7 @@ import com.aliyun.oss.model.Callback;
 import com.aliyun.oss.model.Callback.CalbackBodyType;
 import com.aliyun.oss.model.PutObjectRequest;
 import com.aliyun.oss.model.PutObjectResult;
+import com.cxy.aliyun.config.AliConfig;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -28,8 +29,7 @@ public class CallbackSample {
 
     public static void main(String[] args) throws IOException {
 
-//        OSS ossClient = new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        OSS ossClient = null;
+        OSS ossClient = AliConfig.ossClient();
 
         try {
             String content = "Hello OSS";

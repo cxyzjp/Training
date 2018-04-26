@@ -28,20 +28,8 @@ public class PolicyController {
     @PostMapping
     public Map<String, String> doGet(@RequestBody PolicyRequest policyRequest)
             throws ServletException, IOException {
-        String endpoint = AliConfig.endpoint;
-        String accessId = AliConfig.accessKeyId;
-        String accessKey = AliConfig.accessKeySecret;
-        String bucket = AliConfig.bucketName;
         String dir = policyRequest.getDir();
-//        String accessId = AliConfig.accessKeyId;
-//        String accessKey = AliConfig.accessKeySecret;
-//        String bucket = AliConfig.bucketName;
-//        String dir = policyRequest.getDir();
-        String host = "http://" + bucket + "." + endpoint;
-//        String host = "http://chuandao01.oss-cn-hangzhou.aliyuncs.com";
-//        String host = "http://rad.oss-cn-hangzhou.aliyuncs.com";
-        OSS client = new OSSClientBuilder().build(endpoint,accessId,accessKey);
-//        OSSClient client = new OSSClient(endpoint, accessId, accessKey);
+        OSS client = AliConfig.ossClient();
         try {
             long expireTime = 300;
             long expireEndTime = System.currentTimeMillis() + expireTime * 1000;
@@ -56,11 +44,11 @@ public class PolicyController {
             String postSignature = client.calculatePostSignature(postPolicy);
 
             Map<String, String> respMap = new LinkedHashMap<>();
-            respMap.put("accessid", accessId);
+            respMap.put("accessid", AliConfig.accessKeyId);
+            respMap.put("host", AliConfig.host);
+            respMap.put("dir", dir);
             respMap.put("policy", encodedPolicy);
             respMap.put("signature", postSignature);
-            respMap.put("dir", dir);
-            respMap.put("host", host);
             respMap.put("expire", String.valueOf(expireEndTime / 1000));
 
             JSONObject callback = new JSONObject();
@@ -78,41 +66,4 @@ public class PolicyController {
         return null;
     }
 
-    @PostMapping("/api")
-    public Map<String, String> getOSSPolicy(@RequestBody PolicyRequest policyRequest) {
-        String endpoint = AliConfig.endpoint;
-        String accessId = AliConfig.accessKeyId;
-        String accessKey = AliConfig.accessKeySecret;
-        String bucket = AliConfig.bucketName;
-        String dir = policyRequest.getDir();
-
-        String host = "http://" + bucket + "." + endpoint;
-        long expireEndTime = System.currentTimeMillis() + 300 * 1000;
-        Date expiration = new Date(expireEndTime);
-        PolicyConditions policyConds = new PolicyConditions();
-        policyConds.addConditionItem(PolicyConditions.COND_CONTENT_LENGTH_RANGE, 0, 1048576000);
-        policyConds.addConditionItem(MatchMode.StartWith, PolicyConditions.COND_KEY, dir);
-
-//        OSSClient ossClient = new OSSClient(endpoint, accessId, accessKey);
-        OSS ossClient = new OSSClientBuilder().build(endpoint, accessId, accessKey);
-        String postPolicy = ossClient.generatePostPolicy(expiration, policyConds);
-        byte[] binaryData = null;
-        try {
-            binaryData = postPolicy.getBytes("utf-8");
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        String encodedPolicy = BinaryUtil.toBase64String(binaryData);
-        String postSignature = ossClient.calculatePostSignature(postPolicy);
-
-        Map<String, String> respMap = new LinkedHashMap<>();
-        respMap.put("accessid", accessId);
-        respMap.put("policy", encodedPolicy);
-        respMap.put("signature", postSignature);
-        respMap.put("dir", dir);
-        respMap.put("host", host);
-        respMap.put("expire", String.valueOf(expireEndTime / 1000));
-
-        return respMap;
-    }
 }

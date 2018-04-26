@@ -19,9 +19,9 @@ public class STSController {
 
     @GetMapping
     public AssumeRoleResponse.Credentials getSTS() throws Exception{
-        IClientProfile profile = DefaultProfile.getProfile(AliConfig.region, AliConfig.m_accessKeyID, AliConfig.m_accessKeySecret);
+        IClientProfile profile = DefaultProfile.getProfile(AliConfig.region, AliConfig.accessKeyId, AliConfig.accessKeySecret);
         DefaultAcsClient client = new DefaultAcsClient(profile);
-        AssumeRoleResponse response = assumeRole(client, AliConfig.m_roleArn);
+        AssumeRoleResponse response = assumeRole(client, AliConfig.roleArn);
         AssumeRoleResponse.Credentials credentials = response.getCredentials();
         System.out.println(credentials.getAccessKeyId() + "\n" +
                 credentials.getAccessKeySecret() + "\n" +

@@ -1,6 +1,7 @@
 package com.cxy.aliyun.config;
 
 import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
 
 public class AliConfig {
 
@@ -12,6 +13,7 @@ public class AliConfig {
     public static final String roleArn = "acs:ram::1317421807545751:role/aliyunsupportfullaccessrole";
     public static final String roleSessionName = "AliyunSupportFullAccessRole";
     public static final String bucketName = "chuandao01";
+    public static final String host = "http://" + bucketName + "." + endpoint;
     public static final String inputBucketName = "chuandao-in1";
     public static final String outputBucketName = "chuandao-out1";
 
@@ -24,8 +26,7 @@ public class AliConfig {
     public static final String m_roleSessionName = "media_user";
 
     public static OSS ossClient() {
-//        return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
-        return null;
+        return new OSSClientBuilder().build(endpoint, accessKeyId, accessKeySecret);
     }
 
 }

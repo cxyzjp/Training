@@ -1,5 +1,11 @@
 package com.cxy.aliyun.oss;
 
+import com.aliyun.oss.OSS;
+import com.aliyun.oss.OSSClientBuilder;
+import com.aliyun.oss.model.OSSObjectSummary;
+import com.aliyun.oss.model.ObjectListing;
+import com.cxy.aliyun.config.AliConfig;
+
 public class ObjectsSTS {
 
     public static void main(String[] args) {

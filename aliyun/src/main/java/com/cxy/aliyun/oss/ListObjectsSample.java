@@ -16,8 +16,7 @@ public class ListObjectsSample {
 
     public static void main(String[] args) throws IOException {
 
-//        OSS client = AliConfig.ossClient();
-        OSS client = null;
+        OSS client = AliConfig.ossClient();
         String bucketName = AliConfig.bucketName;
 
         try {
