@@ -5,7 +5,6 @@ import com.alibaba.fastjson.JSONObject;
 import com.aliyuncs.DefaultAcsClient;
 import com.aliyuncs.IAcsClient;
 import com.aliyuncs.exceptions.ClientException;
-import com.aliyuncs.exceptions.ServerException;
 import com.aliyuncs.mts.model.v20140618.SubmitJobsRequest;
 import com.aliyuncs.mts.model.v20140618.SubmitJobsResponse;
 import com.aliyuncs.profile.DefaultProfile;
@@ -16,73 +15,46 @@ import java.net.URLEncoder;
 
 public class SimpleTranscode {
 
-    private static String templateId = "S00000001-100030";
-    private static String ossInputObject = "record/a.mp4";
-    private static String ossOutputObject = "1/a";
+    private static String templateId_mp4 = "S00000001-200030";
+    private static String templateId_hls = "S00000001-100030";
+    private static String ossInputObject = "input/tt1.mp4";
 
     public static void main(String[] args) {
         // 创建DefaultAcsClient实例并初始化
-        DefaultProfile profile = DefaultProfile.getProfile(
-                AliConfig.region,      // 地域ID
-                AliConfig.accessKeyId,      // RAM账号的AccessKey ID
-                AliConfig.accessKeySecret); // RAM账号Access Key Secret
+        DefaultProfile profile = DefaultProfile.getProfile(AliConfig.region, AliConfig.accessKeyId, AliConfig.accessKeySecret);
         IAcsClient client = new DefaultAcsClient(profile);
-        // 创建API请求并设置参数
+
         SubmitJobsRequest request = new SubmitJobsRequest();
-        // Input
-        JSONObject input = new JSONObject();
-        input.put("Location", AliConfig.ossLocation);
-        input.put("Bucket", "chuandao01");
+        request.setOutputLocation(AliConfig.ossLocation);
+        request.setOutputBucket(AliConfig.bucketName);
+        request.setPipelineId(AliConfig.pipelineId);
         try {
-            input.put("Object", URLEncoder.encode("1/in/c.avi", "utf-8"));
+            // Input
+            JSONObject input = new JSONObject();
+            input.put("Location", AliConfig.ossLocation);
+            input.put("Bucket", AliConfig.bucketName);
+            input.put("Object", URLEncoder.encode(ossInputObject, "utf-8"));
+            request.setInput(input.toJSONString());
+
+            // Output
+            JSONObject mp4 = new JSONObject();
+            mp4.put("OutputObject", URLEncoder.encode("output/tt1.mp4", "utf-8"));
+            mp4.put("TemplateId", templateId_mp4);
+            JSONObject hls = new JSONObject();
+            hls.put("OutputObject", URLEncoder.encode("output/hls/tt1", "utf-8"));
+            hls.put("TemplateId", templateId_hls);
+
+            JSONArray outputs = new JSONArray();
+            outputs.add(mp4);
+            outputs.add(hls);
+            request.setOutputs(outputs.toJSONString());
         } catch (UnsupportedEncodingException e) {
             throw new RuntimeException("input URL encode failed");
         }
-        request.setInput(input.toJSONString());
 
-        // Output
-        String outputOSSObject;
         try {
-            outputOSSObject = URLEncoder.encode("1/out/c", "utf-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("output URL encode failed");
-        }
-        JSONObject output = new JSONObject();
-        output.put("OutputObject", outputOSSObject);
-
-        // Ouput->Container
-//        JSONObject container = new JSONObject();
-//        container.put("Format", "mp4");
-//        output.put("Container", container.toJSONString());
-//        // Ouput->Video
-//        JSONObject video = new JSONObject();
-//        video.put("Codec", "H.264");
-//        video.put("Bitrate", "1500");
-//        video.put("Width", "1280");
-//        video.put("Fps", "25");
-//        output.put("Video", video.toJSONString());
-//        // Ouput->Audio
-//        JSONObject audio = new JSONObject();
-//        audio.put("Codec", "AAC");
-//        audio.put("Bitrate", "128");
-//        audio.put("Channels", "2");
-//        audio.put("Samplerate", "44100");
-//        output.put("Audio", audio.toJSONString());
-        // Ouput->TemplateId
-        output.put("TemplateId", templateId);
-        JSONArray outputs = new JSONArray();
-        outputs.add(output);
-
-        request.setOutputs(outputs.toJSONString());
-        request.setOutputLocation(AliConfig.ossLocation);
-        request.setOutputBucket("chuandao01");
-
-        // PipelineId
-        request.setPipelineId(AliConfig.pipelineId);
-        // 发起请求并处理应答或异常
-        SubmitJobsResponse response;
-        try {
-            response = client.getAcsResponse(request);
+            // 发起请求并处理应答或异常
+            SubmitJobsResponse response = client.getAcsResponse(request);
             System.out.println("RequestId is:" + response.getRequestId());
             if (response.getJobResultList().get(0).getSuccess()) {
                 System.out.println("JobId is:" + response.getJobResultList().get(0).getJob().getJobId());
@@ -90,8 +62,6 @@ public class SimpleTranscode {
                 System.out.println("SubmitJobs Failed code:" + response.getJobResultList().get(0).getCode() +
                         " message:" + response.getJobResultList().get(0).getMessage());
             }
-        } catch (ServerException e) {
-            e.printStackTrace();
         } catch (ClientException e) {
             e.printStackTrace();
         }

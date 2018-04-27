@@ -37,7 +37,7 @@ public class SignController {
 
         String keyId = AliConfig.accessKeyId;
         String keySecret = AliConfig.accessKeySecret;
-        String action = "QueryMediaListByURL";
+        String action = "PutObject";
 
         Map<String, String> parameterMap = new HashMap<>();
         // 加入请求公共参数
@@ -51,7 +51,7 @@ public class SignController {
         parameterMap.put("Format", "JSON");
 
         // 加入方法特有参数
-        parameterMap.put("FileURLs", "http://chuandao-in1.oss-cn-hangzhou.aliyuncs.com/1001/201803/a.mp4");
+//        parameterMap.put("JobIds", "e7c4e89b5140486ebe0f52080a721f34,ec5df8d40a214b9b931240a9b38d5007");
 
         sign(keySecret, parameterMap);
     }
