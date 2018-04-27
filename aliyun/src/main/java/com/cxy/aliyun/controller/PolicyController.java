@@ -16,8 +16,8 @@ import sun.misc.BASE64Encoder;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,7 +28,23 @@ public class PolicyController {
     @PostMapping
     public Map<String, String> doGet(@RequestBody PolicyRequest policyRequest)
             throws ServletException, IOException {
-        String dir = policyRequest.getDir();
+        Long userSn = 23333L;
+        String originFileName = policyRequest.getOriginFileName();
+        String materialType = policyRequest.getMaterialType();
+        String dir;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
+        String date = sdf.format(new java.util.Date());
+        // 1：视频，2：音频，3：图片
+        if ("1".equals(materialType)) {
+            dir = userSn + "/v/o/" + date + "/";
+        } else if ("2".equals(materialType)) {
+            dir = userSn + "/a/" + date + "/";
+        } else if ("3".equals(materialType)) {
+            dir = userSn + "/p/" + date + "/";
+        } else {
+            return null;
+        }
+
         OSS client = new OSSClientBuilder().build(AliConfig.endpoint, AliConfig.accessKeyId, AliConfig.accessKeySecret);
         try {
             long expireTime = 300;
@@ -40,9 +56,7 @@ public class PolicyController {
 
             String postPolicy = client.generatePostPolicy(expiration, policyConds);
             byte[] binaryData = postPolicy.getBytes("utf-8");
-            System.out.println(new String(binaryData));
             String encodedPolicy = BinaryUtil.toBase64String(binaryData);
-            System.out.println(encodedPolicy);
             String postSignature = client.calculatePostSignature(postPolicy);
 
             Map<String, String> respMap = new LinkedHashMap<>();
@@ -55,10 +69,9 @@ public class PolicyController {
 
             JSONObject callback = new JSONObject();
             callback.put("callbackUrl", "http://dev.love-kb.com/aliyun/oss/callback");
-            callback.put("callbackBody", "{\"bucket\":${bucket},\"object\":${object},\"uid\":\"2333333\"}");
-//            callback.put("callbackBody", "{\"bucket\":${bucket},\"object\":${object}}");
+            callback.put("callbackBody", "{\"object\":${object},\"uid\":\"" + userSn + "\",\"materialType\":\"" +
+                    materialType + "\",\"originFileName\":\"" + originFileName + "\"}");
             callback.put("callbackBodyType", "application/json");
-
             BASE64Encoder encoder = new BASE64Encoder();
             respMap.put("callback", encoder.encode(callback.toString().getBytes()));
             return respMap;
@@ -66,14 +79,6 @@ public class PolicyController {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static void main(String[] args) throws UnsupportedEncodingException {
-        String postPolicy = "{\"aexpiration\":\"2012-00-27T05:43:00.224Z\",\"conditions\":[[\"content-length-range\",0,1048576001],[\"starts-with\",\"$key\",\"1001/\"]]}";
-        byte[] binaryData = postPolicy.getBytes("utf-8");
-        System.out.println(new String(binaryData));
-        String encodedPolicy = BinaryUtil.toBase64String(binaryData);
-        System.out.println(encodedPolicy);
     }
 
 }

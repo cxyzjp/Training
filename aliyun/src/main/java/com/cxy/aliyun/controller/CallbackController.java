@@ -1,6 +1,9 @@
 package com.cxy.aliyun.controller;
 
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
 import com.aliyun.oss.common.utils.BinaryUtil;
+import com.cxy.aliyun.mts.SimpleTranscode;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -24,6 +27,21 @@ import java.security.spec.X509EncodedKeySpec;
 @RequestMapping("/oss/callback")
 public class CallbackController {
 
+    private static boolean doCheck(String content, byte[] sign, String publicKey) {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            byte[] encodedKey = BinaryUtil.fromBase64String(publicKey);
+            PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+            java.security.Signature signature = java.security.Signature.getInstance("MD5withRSA");
+            signature.initVerify(pubKey);
+            signature.update(content.getBytes());
+            return signature.verify(sign);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
+    }
+
     @RequestMapping(method = RequestMethod.GET)
     public void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -35,12 +53,24 @@ public class CallbackController {
             throws ServletException, IOException {
         String ossCallbackBody = GetPostBody(request.getInputStream(), Integer.parseInt(request.getHeader("content-length")));
         boolean ret = VerifyOSSCallbackRequest(request, ossCallbackBody);
-        System.out.println("verify result:" + ret);
-        System.out.println("OSS Callback Body:" + ossCallbackBody);
         if (ret) {
-            response(request, response, ossCallbackBody, HttpServletResponse.SC_OK);
+            // 新增素材
+            Long materialId = System.currentTimeMillis();
+
+            JSONObject jsonObject = JSON.parseObject(ossCallbackBody);
+            String materialType = jsonObject.getString("materialType");
+            String ossObject = jsonObject.getString("object");
+            String userSn = jsonObject.getString("userSn");
+            if ("1".equals(materialType)) {
+                // 转码
+                SimpleTranscode transcode = new SimpleTranscode();
+                String jobIds = transcode.transcode(userSn, ossObject);
+                jsonObject.put("jobIds", jobIds);
+            }
+            jsonObject.put("materialId", materialId);
+            response(request, response, jsonObject.toString(), HttpServletResponse.SC_OK);
         } else {
-            response(request, response, "{\"Status\":\"verdify not ok\"}", HttpServletResponse.SC_BAD_REQUEST);
+            response(request, response, "{\"Status\":\"verify fail\"}", HttpServletResponse.SC_BAD_REQUEST);
         }
     }
 
@@ -49,13 +79,6 @@ public class CallbackController {
         String content = null;
         CloseableHttpResponse response1 = null;
         try {
-            // 定义HttpClient
-//            DefaultHttpClient client = new DefaultHttpClient();
-//            // 实例化HTTP方法
-//            HttpGet request = new HttpGet();
-//            request.setURI(new URI(url));
-//            HttpResponse response = client.execute(request);
-
             CloseableHttpClient httpclient = HttpClients.createDefault();
             HttpGet httpGet = new HttpGet(url);
             response1 = httpclient.execute(httpGet);
@@ -132,21 +155,6 @@ public class CallbackController {
         }
         authStr += "\n" + ossCallbackBody;
         return doCheck(authStr, authorization, retString);
-    }
-
-    private static boolean doCheck(String content, byte[] sign, String publicKey) {
-        try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            byte[] encodedKey = BinaryUtil.fromBase64String(publicKey);
-            PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-            java.security.Signature signature = java.security.Signature.getInstance("MD5withRSA");
-            signature.initVerify(pubKey);
-            signature.update(content.getBytes());
-            return signature.verify(sign);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
     }
 
     private void response(HttpServletRequest request, HttpServletResponse response, String results, int status) throws IOException {

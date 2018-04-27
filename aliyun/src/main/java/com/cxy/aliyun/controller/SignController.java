@@ -1,8 +1,10 @@
 package com.cxy.aliyun.controller;
 
 import com.cxy.aliyun.config.AliConfig;
+import com.cxy.aliyun.pojo.SignQueryJobListRequest;
 import org.apache.commons.codec.binary.Base64;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -28,16 +30,11 @@ public class SignController {
     private static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
     @PostMapping
-    public String sign(){
-
-        return null;
-    }
-
-    public static void main(String[] args) throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
+    public String sign(@RequestBody SignQueryJobListRequest req){
 
         String keyId = AliConfig.accessKeyId;
         String keySecret = AliConfig.accessKeySecret;
-        String action = "PutObject";
+        String action = "QueryJobList";
 
         Map<String, String> parameterMap = new HashMap<>();
         // 加入请求公共参数
@@ -51,36 +48,34 @@ public class SignController {
         parameterMap.put("Format", "JSON");
 
         // 加入方法特有参数
-//        parameterMap.put("JobIds", "e7c4e89b5140486ebe0f52080a721f34,ec5df8d40a214b9b931240a9b38d5007");
-
-        sign(keySecret, parameterMap);
+        parameterMap.put("JobIds", req.getJobIds());
+        return sign(keySecret, parameterMap);
     }
 
-    private static void sign(String keySecret, Map<String, String> parameterMap) throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException  {
-        String canonicalizedQueryString = buildCanonicalizedQueryString(parameterMap);
-        System.out.println("CanonicalizedQueryString:" + canonicalizedQueryString);
-
-        String stringToSign = buildStringToSign(canonicalizedQueryString);
-        System.out.println("StringToSign:" + stringToSign);
-
-        String signature = buildSignature(keySecret, stringToSign);
-        System.out.println("Signature:" + signature);
-
-        String requestURL = buildRequestURL(signature, parameterMap);
-        System.out.println("Request URL:" + requestURL);
+    private String sign(String keySecret, Map<String, String> parameterMap) {
+        String requestURL = "";
+        try {
+            String canonicalizedQueryString = buildCanonicalizedQueryString(parameterMap);
+            String stringToSign = buildStringToSign(canonicalizedQueryString);
+            String signature = buildSignature(keySecret, stringToSign);
+            requestURL = buildRequestURL(signature, parameterMap);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return requestURL;
     }
 
-    private static String formatIso8601Date(Date date) {
+    private String formatIso8601Date(Date date) {
         SimpleDateFormat df = new SimpleDateFormat(ISO8601_DATE_FORMAT);
         df.setTimeZone(new SimpleTimeZone(0, "GMT"));
         return df.format(date);
     }
 
-    private static String percentEncode(String value) throws UnsupportedEncodingException {
+    private String percentEncode(String value) throws UnsupportedEncodingException {
         return URLEncoder.encode(value, ENCODE_TYPE).replace("+", "%20").replace("*", "%2A").replace("%7E", "~");
     }
 
-    private static String buildCanonicalizedQueryString(Map<String, String> parameterMap) throws UnsupportedEncodingException {
+    private String buildCanonicalizedQueryString(Map<String, String> parameterMap) throws UnsupportedEncodingException {
         // 对参数进行排序
         List<String> sortedKeys = new ArrayList<>(parameterMap.keySet());
         Collections.sort(sortedKeys);
@@ -94,7 +89,7 @@ public class SignController {
         return temp.toString().substring(1);
     }
 
-    private static String buildStringToSign(String canonicalizedQueryString) throws UnsupportedEncodingException {
+    private String buildStringToSign(String canonicalizedQueryString) throws UnsupportedEncodingException {
         // 生成stringToSign字符
         // 此处需要对canonicalizedQueryString进行编码
         return HTTP_METHOD + SEPARATOR +
@@ -102,7 +97,7 @@ public class SignController {
                 percentEncode(canonicalizedQueryString);
     }
 
-    private static String buildSignature(String keySecret, String stringToSign) throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
+    private String buildSignature(String keySecret, String stringToSign) throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {
         SecretKey key = new SecretKeySpec((keySecret + SEPARATOR).getBytes(ENCODE_TYPE), SignatureMethod.HMAC_SHA1);
         Mac mac = Mac.getInstance(ALGORITHM);
         mac.init(key);
@@ -113,7 +108,7 @@ public class SignController {
         return URLEncoder.encode(base64UTF8String, ENCODE_TYPE);
     }
 
-    private static String buildRequestURL(String signature, Map<String, String> parameterMap) throws UnsupportedEncodingException {
+    private String buildRequestURL(String signature, Map<String, String> parameterMap) throws UnsupportedEncodingException {
         // 生成请求URL
         StringBuilder temp = new StringBuilder("http://mts.cn-hangzhou.aliyuncs.com/?");
         temp.append(URLEncoder.encode("Signature", ENCODE_TYPE)).append("=").append(signature);
