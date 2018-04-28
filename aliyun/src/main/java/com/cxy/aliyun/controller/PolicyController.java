@@ -16,6 +16,7 @@ import sun.misc.BASE64Encoder;
 
 import javax.servlet.ServletException;
 import java.io.IOException;
+import java.net.URLEncoder;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.util.LinkedHashMap;
@@ -67,10 +68,11 @@ public class PolicyController {
             respMap.put("signature", postSignature);
             respMap.put("expire", String.valueOf(expireEndTime / 1000));
 
+            String oFile = URLEncoder.encode(originFileName, "utf-8");
             JSONObject callback = new JSONObject();
             callback.put("callbackUrl", "http://dev.love-kb.com/aliyun/oss/callback");
-            callback.put("callbackBody", "{\"object\":${object},\"uid\":\"" + userSn + "\",\"materialType\":\"" +
-                    materialType + "\",\"originFileName\":\"" + originFileName + "\"}");
+            callback.put("callbackBody", "{\"object\":${object},\"size\":${size},\"userSn\":\"" + userSn +
+                    "\",\"materialType\":\"" + materialType + "\",\"originFileName\":\"" + oFile + "\"}");
             callback.put("callbackBodyType", "application/json");
             BASE64Encoder encoder = new BASE64Encoder();
             respMap.put("callback", encoder.encode(callback.toString().getBytes()));

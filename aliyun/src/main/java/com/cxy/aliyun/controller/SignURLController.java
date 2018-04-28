@@ -39,7 +39,7 @@ public class SignURLController {
         OSS client = AliConfig.ossClient();
 
         Date expires = new Date (new Date().getTime() + 1000 * 600);
-        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest("chuandao-out1", "1001/201803/mp4/a.mp4");
+        GeneratePresignedUrlRequest generatePresignedUrlRequest = new GeneratePresignedUrlRequest("chuandao-out1", "1001/201803/hls/a/");
         generatePresignedUrlRequest.setExpiration(expires);
         URL url = client.generatePresignedUrl(generatePresignedUrlRequest);
 

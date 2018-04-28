@@ -19,6 +19,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URLDecoder;
 import java.security.KeyFactory;
 import java.security.PublicKey;
 import java.security.spec.X509EncodedKeySpec;
@@ -26,21 +27,6 @@ import java.security.spec.X509EncodedKeySpec;
 @Controller
 @RequestMapping("/oss/callback")
 public class CallbackController {
-
-    private static boolean doCheck(String content, byte[] sign, String publicKey) {
-        try {
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            byte[] encodedKey = BinaryUtil.fromBase64String(publicKey);
-            PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
-            java.security.Signature signature = java.security.Signature.getInstance("MD5withRSA");
-            signature.initVerify(pubKey);
-            signature.update(content.getBytes());
-            return signature.verify(sign);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return false;
-    }
 
     @RequestMapping(method = RequestMethod.GET)
     public void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -58,16 +44,20 @@ public class CallbackController {
             Long materialId = System.currentTimeMillis();
 
             JSONObject jsonObject = JSON.parseObject(ossCallbackBody);
-            String materialType = jsonObject.getString("materialType");
             String ossObject = jsonObject.getString("object");
+            String size = jsonObject.getString("size");
+            String materialType = jsonObject.getString("materialType");
             String userSn = jsonObject.getString("userSn");
+            String originFileName = URLDecoder.decode(jsonObject.getString("originFileName"),"utf-8");
             if ("1".equals(materialType)) {
-                // 转码
                 SimpleTranscode transcode = new SimpleTranscode();
-                String jobIds = transcode.transcode(userSn, ossObject);
+                // 截图
+                transcode.snapshotJob(userSn, ossObject);
+                // 转码
+                String jobIds = transcode.transcodeJob(userSn, ossObject);
                 jsonObject.put("jobIds", jobIds);
             }
-            jsonObject.put("materialId", materialId);
+            jsonObject.put("materialId", materialId.toString());
             response(request, response, jsonObject.toString(), HttpServletResponse.SC_OK);
         } else {
             response(request, response, "{\"Status\":\"verify fail\"}", HttpServletResponse.SC_BAD_REQUEST);
@@ -155,6 +145,21 @@ public class CallbackController {
         }
         authStr += "\n" + ossCallbackBody;
         return doCheck(authStr, authorization, retString);
+    }
+
+    private static boolean doCheck(String content, byte[] sign, String publicKey) {
+        try {
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            byte[] encodedKey = BinaryUtil.fromBase64String(publicKey);
+            PublicKey pubKey = keyFactory.generatePublic(new X509EncodedKeySpec(encodedKey));
+            java.security.Signature signature = java.security.Signature.getInstance("MD5withRSA");
+            signature.initVerify(pubKey);
+            signature.update(content.getBytes());
+            return signature.verify(sign);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return false;
     }
 
     private void response(HttpServletRequest request, HttpServletResponse response, String results, int status) throws IOException {
