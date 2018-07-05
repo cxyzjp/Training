@@ -15,11 +15,11 @@ import javax.annotation.Resource;
 @RestController
 @RequestMapping("/sharding")
 public class ShardingControllerTest {
-    @Resource
+    @Autowired
     private OrderMapper orderRepository;
 
     @RequestMapping("/add")
-    public String insert(){
+    public OrderQuery insert(){
         OrderQuery query = new OrderQuery();
 //        query.setCreateTime(1);
         query.setBuyer(1);
@@ -27,7 +27,7 @@ public class ShardingControllerTest {
         query.setcEnd(1524327556);
 //        query.setuStart(new Date(1517875200000L));
 //        query.setuEnd(new Date(1524327556000L));
-        System.out.println(orderRepository.selectAll(query));
-        return "";
+//        System.out.println(orderRepository.queryAll(query));
+        return query;
     }
 }

@@ -1,6 +1,9 @@
 package com.cxy.aliyun.pojo;
 
-public class PolicyRequest {
+import java.io.Serializable;
+
+public class PolicyRequest implements Serializable {
+    private static final long serialVersionUID = 7106996467392858727L;
 
     /** 1：视频，2：音频，3：图片 */
     private String materialType;

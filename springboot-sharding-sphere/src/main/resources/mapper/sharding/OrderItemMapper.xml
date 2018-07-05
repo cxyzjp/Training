@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.cxy.sphere.mapper.sharding.OrderItemMapper">
+    <resultMap id="baseResultMap" type="com.cxy.sphere.entity.OrderItem">
+        <result column="order_item_id" property="orderItemId" jdbcType="BIGINT"/>
+        <result column="order_id" property="orderId" jdbcType="BIGINT"/>
+        <result column="create_time" property="createTime" jdbcType="INTEGER"/>
+        <result column="update_time" property="updateTime" jdbcType="TIMESTAMP"/>
+    </resultMap>
+
+    <update id="createIfNotExistsTable">
+        CREATE TABLE IF NOT EXISTS t_order_item (
+        order_item_id BIGINT AUTO_INCREMENT, order_id BIGINT , create_time INT, update_time TIMESTAMP , PRIMARY KEY (order_item_id));
+    </update>
+
+    <update id="truncateTable">
+        TRUNCATE TABLE t_order_item;
+    </update>
+    
+    <update id="dropTable">
+        DROP TABLE IF EXISTS t_order_item;
+    </update>
+    
+    <insert id="insert" useGeneratedKeys="true" keyProperty="orderItemId">
+        INSERT INTO t_order_item (order_id, create_time, update_time)
+        VALUES (
+        #{orderId,jdbcType=BIGINT},
+        #{createTime,jdbcType=INTEGER},
+        #{updateTime,jdbcType=TIMESTAMP}
+        )
+    </insert>
+    
+    <delete id="delete">
+        DELETE FROM t_order_item WHERE order_id = #{orderId,jdbcType=BIGINT}
+    </delete>
+    
+    <select id="selectAll" resultMap="baseResultMap" parameterType="com.cxy.sphere.entity.OrderQuery">
+        SELECT
+        i.*
+        FROM
+        t_order o, t_order_item i
+        WHERE
+        o.order_id = i.order_id
+        <where>
+            <if test="orderId != null">
+                and o.order_id = #{orderId}
+            </if>
+            <if test="buyer != null">
+                and o.buyer = #{buyer}
+            </if>
+            <if test="seller != null">
+                and o.seller = #{seller}
+            </if>
+            <if test="cStart != null">
+                and o.create_time &gt;= #{cStart}
+            </if>
+            <if test="cEnd != null">
+                and o.create_time &lt;= #{cEnd}
+            </if>
+            <if test="uStart != null">
+                and o.update_time &gt;= #{uStart}
+            </if>
+            <if test="uEnd != null">
+                and o.update_time &lt;= #{uEnd}
+            </if>
+        </where>
+    </select>
+</mapper>

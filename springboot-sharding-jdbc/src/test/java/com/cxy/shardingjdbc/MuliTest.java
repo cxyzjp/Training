@@ -42,4 +42,8 @@ public class MuliTest {
         System.out.println(userBMapper.selectAll());
     }
 
+    @Test
+    public void aTest() {
+//        System.out.println(usersMapper.selectByPrimaryKey(1L));
+    }
 }

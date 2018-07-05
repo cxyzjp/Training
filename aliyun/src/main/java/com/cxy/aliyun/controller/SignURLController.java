@@ -3,7 +3,9 @@ package com.cxy.aliyun.controller;
 import com.aliyun.oss.OSS;
 import com.aliyun.oss.model.GeneratePresignedUrlRequest;
 import com.cxy.aliyun.config.AliConfig;
+import com.cxy.aliyun.pojo.PolicyRequest;
 import org.apache.commons.codec.binary.Base64;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -30,9 +32,11 @@ public class SignURLController {
     private static final String EQUAL = "=";
     private static final String ISO8601_DATE_FORMAT = "yyyy-MM-dd'T'HH:mm:ss'Z'";
 
-    @PostMapping
-    public String sign(){
-        return null;
+    @GetMapping("/sign")
+    public PolicyRequest sign(){
+        PolicyRequest request = new PolicyRequest();
+        request.setMaterialType("888888");
+        return request;
     }
 
     public static void main(String[] args) throws UnsupportedEncodingException, InvalidKeyException, NoSuchAlgorithmException {

@@ -1,10 +1,11 @@
-package com.cxy.shardingjdbc;
+package com.example.demo;
 
-import com.cxy.shardingjdbc.entity.Order;
-import com.cxy.shardingjdbc.entity.OrderItem;
-import com.cxy.shardingjdbc.entity.OrderQuery;
-import com.cxy.shardingjdbc.mapper.sharding.OrderItemMapper;
-import com.cxy.shardingjdbc.mapper.sharding.OrderMapper;
+import com.cxy.sphere.DemoApplication;
+import com.cxy.sphere.entity.Order;
+import com.cxy.sphere.entity.OrderItem;
+import com.cxy.sphere.entity.OrderQuery;
+import com.cxy.sphere.mapper.sharding.OrderItemMapper;
+import com.cxy.sphere.mapper.sharding.OrderMapper;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -14,7 +15,7 @@ import javax.annotation.Resource;
 import java.util.Date;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest
+@SpringBootTest(classes = DemoApplication.class)
 public class ShardingJdbcApplicationTests {
 
     @Resource
@@ -91,9 +92,9 @@ public class ShardingJdbcApplicationTests {
         query.setBuyer(1);
         query.setcStart(1505998800);
         query.setcEnd(1524327556);
-//        query.setuStart(new Date(1517875200000L));
-//        query.setuEnd(new Date(1524327556000L));
-//        System.out.println(orderRepository.queryAll(query));
+        query.setuStart(new Date(1517875200000L));
+        query.setuEnd(new Date(1524327556000L));
+        System.out.println(orderRepository.selectAll(query));
 //        orderRepository.selectByPrimaryKey(1L);
     }
 

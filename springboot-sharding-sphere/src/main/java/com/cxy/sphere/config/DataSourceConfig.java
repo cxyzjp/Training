@@ -1,6 +1,5 @@
-package com.cxy.shardingjdbc.config;
+package com.cxy.sphere.config;
 
-import com.alibaba.druid.spring.boot.autoconfigure.DruidDataSourceBuilder;
 import org.apache.ibatis.session.SqlSessionFactory;
 import org.mybatis.spring.SqlSessionFactoryBean;
 import org.mybatis.spring.SqlSessionTemplate;
@@ -15,7 +14,7 @@ import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 import javax.sql.DataSource;
 
 @Configuration
-@MapperScan(basePackages = "com.cxy.shardingjdbc.mapper.sharding", sqlSessionTemplateRef = "sqlSessionTemplate")
+@MapperScan(basePackages = "com.cxy.sphere.mapper.sharding", sqlSessionTemplateRef = "sqlSessionTemplate")
 public class DataSourceConfig {
 
     @Primary
