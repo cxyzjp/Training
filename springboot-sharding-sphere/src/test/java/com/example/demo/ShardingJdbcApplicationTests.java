@@ -88,12 +88,12 @@ public class ShardingJdbcApplicationTests {
     @Test
     public void select() {
         OrderQuery query = new OrderQuery();
-//        query.setCreateTime(1);
-        query.setBuyer(1);
+//        query.setCreateTime(10);
+//        query.setBuyer(1);
         query.setcStart(1505998800);
-        query.setcEnd(1524327556);
-        query.setuStart(new Date(1517875200000L));
-        query.setuEnd(new Date(1524327556000L));
+//        query.setcEnd(1524327556);
+//        query.setuStart(new Date(1517875200000L));
+//        query.setuEnd(new Date(1524327556000L));
         System.out.println(orderRepository.selectAll(query));
 //        orderRepository.selectByPrimaryKey(1L);
     }
