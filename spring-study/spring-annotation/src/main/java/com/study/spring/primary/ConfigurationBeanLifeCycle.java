@@ -19,8 +19,8 @@ import org.springframework.context.annotation.Configuration;
         2. 通过实现接口。InitializingBean和DisposableBean
         3. 使用@PostConstruct,@PreDestroy
         4. BeanPostProcessor 后置处理器
-            1. postProcessBeforeInitialization：初始化之前(上面的初始化和销毁方法)
-            2. postProcessAfterInitialization：初始化之后(上面的初始化和销毁方法)
+            1. postProcessBeforeInitialization：初始化之前
+            2. postProcessAfterInitialization：初始化之后
             3. Spring底层对BeanPostProcessor的使用。Bean的赋值，生命周期主键，@Autowired等等。
  */
 @Configuration
