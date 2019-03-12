@@ -26,12 +26,13 @@ public class Deploy {
 
     // 自定义配置start
     private static final String jarBaseDir = "C:\\Users\\Bowen\\Desktop";
-    private static final String jarPath = "C:\\Users\\Bowen\\Desktop\\com\\baozun";
+    private static final String jarPath = "C:\\Users\\Bowen\\Desktop\\com\\baozun\\casaba-plus";
 
     private static final String mavenSettingPath = "D:\\software\\apache\\apache-maven-3.5.3\\conf\\settings1.xml";
-    private static final String nexusUrl = "http://192.168.4.108:8081/repository/maven-releases/";
-    // mavenSettingPath中配置的repositoryId
-    private static final String repositoryId = "nexus-releases";
+    // maven-releases maven-snapshots
+    private static final String nexusUrl = "http://192.168.4.108:8081/repository/maven-snapshots/";
+    // mavenSettingPath中配置的repositoryId， nexus-releases nexus-snapshots
+    private static final String repositoryId = "nexus-snapshots";
     // 自定义配置end
 
     private static final int jarBaseDirLength = jarBaseDir.length();
