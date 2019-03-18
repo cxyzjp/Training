@@ -1,8 +1,12 @@
 package com.study.spring.beans;
 
-import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 public class Green {
     private String name;
+
+    public Green(){}
 }
