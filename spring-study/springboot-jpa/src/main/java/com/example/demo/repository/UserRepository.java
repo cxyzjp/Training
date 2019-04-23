@@ -12,6 +12,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * date: 2019/3/12
  */
 public interface UserRepository extends JpaRepository<User, Long> {
+
     Slice<User> findByAge(Integer age, Pageable pageable);
 
     Page<User> findByNameLike(String name, Pageable pageable);
