@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.example</groupId>
     <artifactId>hello-docker</artifactId>
-    <version>1.0</version>
+    <version>2.0</version>
     <name>hello-docker</name>
     <description>Demo project for Spring Boot</description>
 
@@ -35,6 +35,19 @@
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
+
+        <dependency>
+            <groupId>org.apache.zookeeper</groupId>
+            <artifactId>zookeeper</artifactId>
+            <version>3.5.5</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.curator</groupId>
+            <artifactId>curator-recipes</artifactId>
+            <version>4.2.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -59,29 +72,46 @@
                     <execution>
                         <id>default</id>
                         <goals>
+                            <!-- build image-->
                             <goal>build</goal>
+                            <!-- push image-->
                             <goal>push</goal>
                         </goals>
                     </execution>
                 </executions>
                 <configuration>
-                    <!-- 采用配置setting.xml. 下面直接配置用户名密码不起作用
+                    <!--
+                    配置私服账号密码。
+                    方法一：配置maven setting.xml
                     <server>
                         <id>192.168.4.108:8099</id>
                         <username>bowen</username>
                         <password>Harbor12345</password>
                     </server>
+
+                    方法二：直接在此处配置用户名密码，不起作用GitHub上也有类似问题，没有解决
+                    <username>bowen</username>
+                    <password>Harbor12345</password>
                     -->
-                    <!--<username>bowen</username>-->
-                    <!--<password>Harbor12345</password>-->
+                    <!-- 镜像上传的私有仓库地址 -->
                     <repository>192.168.4.108:8099/bowen/${project.artifactId}</repository>
+                    <!-- 开启maven setting中的身份验证 -->
                     <useMavenSettingsForAuth>true</useMavenSettingsForAuth>
+                    <!-- image tag -->
                     <tag>${project.version}</tag>
+                    <!-- build 参数，会传递给Dockerfile -->
                     <buildArgs>
                         <JAR_FILE>target/${project.build.finalName}.jar</JAR_FILE>
                     </buildArgs>
                     <dockerfile>./Dockerfile</dockerfile>
                 </configuration>
+                <!--
+                    要求：maven和docker环境
+                    执行 mvn deploy 命令
+                    1. 项目打包成jar
+                    2. 根据Dockerfile定义打成镜像
+                    3. 上传到私有仓库
+                -->
             </plugin>
         </plugins>
     </build>
