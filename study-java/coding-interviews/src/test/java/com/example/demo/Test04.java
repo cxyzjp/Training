@@ -1,62 +1,72 @@
 package com.example.demo;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 
 /**
  * description:
+ * 输入某二叉树的前序遍历和中序遍历的结果，请重建出该二叉树。
+ * 假设输入的前序遍历和中序遍历的结果中都不含重复的数字。
+ * 例如输入前序遍历序列{1,2,4,7,3,5,6,8}和中序遍历序列{4,7,2,1,5,3,8,6}，则重建二叉树并返回。
+ * <p>
  * author: bowen
- * date: 2019/6/17
+ * date: 2019/6/18
  */
 public class Test04 {
-    public class ListNode {
+
+    public class TreeNode {
         int val;
-        ListNode next = null;
+        TreeNode left;
+        TreeNode right;
 
-        ListNode(int val) {
+        TreeNode(int val) {
             this.val = val;
         }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
-
-    private ListNode getListNode() {
-        ListNode n3 = new ListNode(3, null);
-        ListNode n2 = new ListNode(2, n3);
-        return new ListNode(1, n2);
     }
 
     public static void main(String[] args) {
         Test04 t = new Test04();
-        System.out.println(t.printListFromTailToHead(t.getListNode()));
+        int[] pre = {1,2,4,7,3,5,6,8};
+        int[] in = {4,7,2,1,5,3,8,6};
+        TreeNode node = t.reConstructBinaryTree(pre,in);
+        t.pre(node);
+        System.out.println();
+        t.in(node);
     }
 
-    // 递归
-    private ArrayList<Integer> list = new ArrayList<>();
-    public ArrayList<Integer> printListFromTailToHead(ListNode listNode) {
-        if (listNode != null) {
-            printListFromTailToHead(listNode.next);
-            list.add(listNode.val);
+    public TreeNode reConstructBinaryTree(int[] pre, int[] in) {
+        if (pre.length == 0 || in.length == 0) {
+            return null;
         }
-        return list;
+        TreeNode node = new TreeNode(pre[0]);
+        for (int i = 0; i < in.length; i++) {
+            if (in[i] == pre[0]) {
+                // 左节点的前序和中序
+                node.left = reConstructBinaryTree(Arrays.copyOfRange(pre, 1, i + 1), Arrays.copyOfRange(in, 0, i));
+                // 右节点的前序和中序
+                node.right = reConstructBinaryTree(Arrays.copyOfRange(pre, i+1, pre.length), Arrays.copyOfRange(in, i+1, in.length));
+                break;
+            }
+        }
+        return node;
     }
 
-    // 轮询加入List，倒序List
-    public ArrayList<Integer> printListFromTailToHead2(ListNode listNode) {
-        ArrayList<Integer> list = new ArrayList<>();
-        while (listNode != null) {
-            list.add(listNode.val);
-            listNode = listNode.next;
+    public void pre(TreeNode node){
+        System.out.print(node.val + " ");
+        if(node.left != null){
+            pre(node.left);
         }
-        int size = list.size();
-        for (int i = 0; i < size / 2; i++) {
-            Integer temp = list.get(i);
-            list.set(i, list.get(size - 1 - i));
-            list.set(size - 1 - i, temp);
+        if(node.right !=null){
+            pre(node.right);
         }
-        return list;
     }
 
+    public void in(TreeNode node){
+        if(node.left != null){
+            in(node.left);
+        }
+        System.out.print(node.val + " ");
+        if(node.right !=null){
+            in(node.right);
+        }
+    }
 }
