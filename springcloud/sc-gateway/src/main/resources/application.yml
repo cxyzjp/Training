@@ -1,0 +1,30 @@
+
+server:
+  port: 9310
+
+spring:
+  application:
+    name: cd-gateway
+  cloud:
+    gateway:
+      discovery:
+        locator:
+          enabled: true
+      routes:
+        - id: route
+          uri: http://www.cxyzjp.cn
+          predicates:
+            - Method=GET
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:9210/eureka
+  instance:
+    preferIpAddress: true
+    instance-id: ${spring.application.name}:${server.port}
+
+logging:
+  level:
+    org.springframework.cloud.gateway: debug
+
