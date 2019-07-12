@@ -1,20 +1,10 @@
 
 server:
-  port: 9310
+  port: 9510
 
 spring:
   application:
-    name: sc-gateway
-  cloud:
-    gateway:
-      discovery:
-        locator:
-          enabled: true
-      routes:
-        - id: route
-          uri: http://www.cxyzjp.cn
-          predicates:
-            - Method=GET
+    name: sc-product
 
 eureka:
   client:
