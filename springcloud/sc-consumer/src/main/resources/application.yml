@@ -1,6 +1,6 @@
 
 server:
-  port: 9611
+  port: 9610
 
 spring:
   application:
@@ -13,6 +13,17 @@ eureka:
   instance:
     preferIpAddress: true
     instance-id: ${spring.application.name}:${server.port}
+
+security:
+  oauth2:
+    resource:
+      user-info-uri: http://localhost:9330/users/current #获取当前Token的用户信息
+    client:
+      clientId: sc-consumer
+      clientSecret: 123456
+      accessTokenUri: http://localhost:9330/oauth/token #获取Token
+      grant-type: client_credentials,password
+      scope: server
 
 logging:
   level:

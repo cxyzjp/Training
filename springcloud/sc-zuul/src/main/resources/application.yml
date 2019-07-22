@@ -8,9 +8,9 @@ spring:
 
 zuul:
   routes:
-    api-pruduct:
-      path: /pruduct/**
-      serviceId: sc-pruduct
+    api-product:
+      path: /product/**
+      serviceId: sc-product
     api-consumer:
       path: /consumer/**
       serviceId: sc-consumer
