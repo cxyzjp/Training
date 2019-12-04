@@ -1,4 +1,4 @@
-package com.example.demo;
+package com.example.practice.one;
 
 /**
  * description: 请实现一个函数，将一个字符串中的每个空格替换成“%20”。
@@ -7,7 +7,7 @@ package com.example.demo;
  * author: bowen
  * date: 2019/6/17
  */
-public class Test02 extends BaseTest {
+public class Test02 {
     public static void main(String[] args) {
         Test02 t = new Test02();
 

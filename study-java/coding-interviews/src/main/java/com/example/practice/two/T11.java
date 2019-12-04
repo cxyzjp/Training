@@ -1,12 +1,9 @@
-package com.example.demo;
+package com.example.practice.two;
 
 /**
- * description:
  * 输入一个整数，输出该数二进制表示中1的个数。
- * author: bowen
- * date: 2019/7/1
  */
-public class Test11 {
+public class T11 {
 
     /**
      * 思路：n=1往左位移相当于2的n次方。 target和n位与等于0，判断该位置是1.
@@ -35,7 +32,7 @@ public class Test11 {
     }
 
     public static void main(String[] args) {
-        Test11 t = new Test11();
+        T11 t = new T11();
         System.out.println(t.NumberOf1(11));
 
         System.out.println(System.currentTimeMillis());

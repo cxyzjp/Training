@@ -1,6 +1,4 @@
-package com.example.demo;
-
-import org.junit.Test;
+package com.example.practice.one;
 
 /**
  * description: 在一个二维数组中（每个一维数组的长度相同），
@@ -10,12 +8,7 @@ import org.junit.Test;
  * author: bowen
  * date: 2019/6/17
  */
-public class Test01 extends BaseTest {
-
-    @Test
-    public void test01() {
-        System.out.println("hello world");
-    }
+public class Test01 {
 
     public static void main(String[] args) {
         int target = 4;
