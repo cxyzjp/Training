@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script type="text/javascript" src="../js/jquery-1.11.1.min.js" ></script>
+</head>
+<body>
+    <button onclick="doGet();">GET</button>
+    <button onclick="doPost();">POST</button>
+    <button onclick="doPut();">PUT</button>
+    <button onclick="doDelete();">DELETE</button>
+    <button onclick="doPatch();">PATCH</button>
+</body>
+<script>
+	
+	function doGet(){
+		$.ajax({
+			type:"get",
+			data : {
+				'param' : "GET"
+			},
+			url : 'http://localhost:8080/doGet/kkk',
+			success : function(result){
+				console.log(result);
+				alert(result);
+			}
+		});
+	}
+	
+	function doPost(){
+		$.ajax({
+			type:"post",
+			url : 'http://localhost:8080/doPost/kkk',
+			data : {
+				'param' : "POST"
+			},
+			success : function(result){
+				console.log(result);
+				alert(result);
+			}
+		});
+	}
+	
+	function doPut(){
+		$.ajax({
+			type:"put",
+			url : 'http://localhost:8080/doPut/kkk',
+			data : {
+				'param' : "PUT"
+			},
+			success : function(result){
+				console.log(result);
+				alert(result);
+			}
+		});
+	}
+	
+	function doDelete(){
+		$.ajax({
+			type:"delete",
+			url : 'http://localhost:8080/doDelete/kkk',
+			data : {
+				'param' : "DELETE"
+			},
+			success : function(result){
+				console.log(result);
+				alert(result);
+			}
+		});
+	}
+	
+	function doPatch(){
+		$.ajax({
+			type:"patch",
+			url : 'http://localhost:8080/doPatch/kkk',
+			data : {
+				'param' : "PATCH"
+			},
+			success : function(result){
+				console.log(result);
+				alert(result);
+			}
+		});
+	}
+</script>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title></title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+
+    url:<input id="getInput" style="width: 45%;"/> </br>
+    <button id="doGet" type="button">get</button></br>
+    url:<input id="postInput" style="width: 45%;"/> </br>
+    json: <textarea id="postJson">{}</textarea></br>
+    <button id="doPost" type="button">post</button></br>
+    result:
+    <div id="resultDiv"></div>
+
+    </body>
+    <script>    
+        var resultDiv = document.getElementById('resultDiv');
+
+        var getInput = document.getElementById('getInput');
+        var doGet = document.getElementById('doGet');
+        doGet.onclick = function(){
+            var xhr = new XMLHttpRequest();
+            xhr.open("get", getInput.value, true);
+            xhr.setRequestHeader('Tenant-Id', '1');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    resultDiv.innerHTML=xhr.responseText;
+                }
+            }
+            xhr.send(null);
+        }
+
+        var postInput = document.getElementById('postInput');
+        var postJson = document.getElementById('postJson');
+        var doPost = document.getElementById('doPost');
+        doPost.onclick = function(){
+            var xhr = new XMLHttpRequest();
+            xhr.open("POST", postInput.value, true);
+            xhr.setRequestHeader('content-type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState == 4) {
+                    resultDiv.innerHTML=xhr.responseText;
+                }
+            }
+            xhr.send(postJson.value);
+        }
+    </script>
+</html>

@@ -1,0 +1,23 @@
+
+server:
+  tomcat:
+    uri-encoding: UTF-8
+
+spring:
+  profiles:
+    active: shiro
+  http:
+    encoding:
+      force: true
+      charset: UTF-8
+      enabled: true
+  datasource:
+    url: jdbc:mysql://localhost:3306/study
+    username: root
+    password: root
+    driverClassName: com.mysql.jdbc.Driver
+    max-active: 20
+    max-idle: 8
+    min-idle: 8
+    initial-size: 10
+    

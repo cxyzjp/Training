@@ -1,0 +1,26 @@
+
+### spring ###
+spring: 
+  ### jdbc ###
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/study?characterEncoding=UTF-8&zeroDateTimeBehavior=convertToNull
+    username: root
+    password: root
+  ### spring redis ###
+  redis:
+    host: 127.0.0.1
+    port: 6379
+    password: 123456
+    database: 1
+    pool:
+      max-active: 8
+      max-wait: 1
+      max-idle: 500
+      min-idle: 0
+    
+
+### redis 自定义属性  ###
+redis:
+  bearer:
+    timeout: 10080

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx" xmlns:jdbc="http://www.springframework.org/schema/jdbc"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:mvc="http://www.springframework.org/schema/mvc"
+	xsi:schemaLocation="
+     http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+     http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+     http://www.springframework.org/schema/jdbc http://www.springframework.org/schema/jdbc/spring-jdbc.xsd
+     http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd
+     http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd
+     http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+	<!-- ThreadPoolExecutor池子的处理流程如下： -->
+	<!-- 1）当池子大小小于corePoolSize就新建线程，并处理请求 -->
+	<!-- 2）当池子大小等于corePoolSize，把请求放入workQueue中，池子里的空闲线程就去从workQueue中取任务并处理 -->
+	<!-- 3）当workQueue放不下新入的任务时，新建线程入池，并处理请求，如果池子大小撑到了maximumPoolSize就用RejectedExecutionHandler来做拒绝处理 -->
+	<!-- 4）另外，当池子的线程数大于corePoolSize的时候，多余的线程会等待keepAliveTime长的时间，如果无请求可处理就自行销毁 -->
+	<!-- 其会优先创建 CorePoolSiz 线程， 当继续增加线程时，先放入Queue中，当 CorePoolSiz 和 Queue 都满的时候，就增加创建新线程，当线程达到MaxPoolSize的时候，就会抛出错 
+		误 org.springframework.core.task.TaskRejectedException -->
+	<!-- 另外MaxPoolSize的设定如果比系统支持的线程数还要大时，会抛出java.lang.OutOfMemoryError: unable 
+		to create new native thread 异常。 -->
+
+	<!-- 异步线程池 -->
+	<bean id="taskExecutor"
+		class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+		<!-- 核心线程数 -->
+		<property name="corePoolSize" value="${taskexecutor.corePoolSize}" />
+		<!-- 最大线程数 -->
+		<property name="maxPoolSize" value="${taskexecutor.maxPoolSize}" />
+		<!-- 队列最大长度 >=mainExecutor.maxSize -->
+		<property name="queueCapacity" value="${taskexecutor.queueCapacity}" />
+		<!-- 线程池维护线程所允许的空闲时间 -->
+		<property name="keepAliveSeconds" value="${taskexecutor.keepAliveSeconds}" />
+
+		<!-- 线程池对拒绝任务(无线程可用)的处理策略 -->
+		<!-- ThreadPoolExecutor类有几个内部实现类来处理这类情况： -->
+		<!-- - AbortPolicy 丢弃任务，抛运行时异常 -->
+		<!-- - CallerRunsPolicy 主线程直接执行该任务，执行完之后尝试添加下一个任务到线程池中，可以有效降低向线程池内添加任务的速度 -->
+		<!-- - DiscardPolicy 忽视，什么都不会发生 -->
+		<!-- - DiscardOldestPolicy 从队列中踢出最先进入队列（最后一个执行）的任务 -->
+		<property name="rejectedExecutionHandler">
+			<bean class="${taskexecutor.rejectedExecutionHandler}" />
+		</property>
+	</bean>
+
+</beans>

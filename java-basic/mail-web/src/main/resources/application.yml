@@ -1,0 +1,3 @@
+server:
+  context-path: /mail
+  port: 8088

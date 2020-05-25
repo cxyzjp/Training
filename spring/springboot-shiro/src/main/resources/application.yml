@@ -1,0 +1,23 @@
+
+### spring ###
+spring:
+  profiles:
+    active: dev
+  jackson:
+    default-property-inclusion: non-null
+
+### mybatis ###
+mybatis: 
+  type-aliases-package: com.cxy.entity
+  mapper-locations:
+  - classpath*:mapper/**/*.xml
+
+custom:
+  rest:
+    connection:
+      socketTimeout: 10000  ##数据传输的最长时间 ##   
+      connectionRequestTimeout: 500  ##从连接池中获取到连接的最长时间##
+      connectTimeout: 1000  ##创建连接的最长时间##
+      maxTotal: 200  ##最大链接数##
+      defaultMaxPerRoute: 20  ##设置每个主机地址的并发数##
+      staleConnectionCheckEnabled: true  ##提交请求前测试连接是否可用##
