@@ -7,7 +7,7 @@
 │  └─ maven-upload					// maven推送到私服
 │  └─ thrift						// thrift
 ├─ java-basic
-│  ├─ coding-interviews				// 剑指Offer练习
+│  ├─ coding-interviews				// 剑指Offer练习、算法
 │  └─ concurrent					// 多线程练习
 │  ├─ jdk							// jdk源码
 │  ├─ jvm							// jvm资料
@@ -21,6 +21,13 @@
 
 # study
 
+## java-basic
+### coding-interviews
+LeetCode、剑指offer练习、算法
+- 排序算法基本实现
+
 skill/WebDemo
 - jQuery http请求
 - JavaScript restful js原生请求
+
+skill/mail-web Java实现邮件发送
