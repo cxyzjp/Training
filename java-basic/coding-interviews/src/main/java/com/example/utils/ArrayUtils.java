@@ -20,9 +20,17 @@ public class ArrayUtils {
     }
 
     public static int[] randomArray() {
-        int[] arr = new int[10];
-        for (int i = 0; i < 10; i++) {
-            arr[i] = random(1, 10);
+        return randomArray(10, 1, 10);
+    }
+
+    public static int[] randomArray(int length) {
+        return randomArray(length, 1, 10);
+    }
+
+    public static int[] randomArray(int length, int min, int max) {
+        int[] arr = new int[length];
+        for (int i = 0; i < length; i++) {
+            arr[i] = random(min, max);
         }
         printArrays(arr);
         return arr;

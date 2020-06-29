@@ -16,12 +16,13 @@ public class HeapOfArray {
         maxHeap(arr);
         printArrays(arr);
 
-        for (int i = 0; i < 100; i++) {
-            arr = randomArray();
-            maxHeap(arr);
-            printArrays(arr);
-        }
-        System.out.println("success");
+        arr = randomArray();
+        maxHeapRecursive(arr);
+        printArrays(arr);
+
+        arr = randomArray(9);
+        maxHeapRecursive(arr);
+        printArrays(arr);
     }
 
     public static void maxHeap(int[] arr) {
@@ -45,6 +46,37 @@ public class HeapOfArray {
                     break;
                 }
             }
+        }
+    }
+
+    public static void maxHeapRecursive(int[] arr) {
+        int lastNotLeaf = (arr.length - 1) / 2;
+        for (int i = lastNotLeaf; i >= 0; i--) {
+            sink(arr, i, arr.length);
+        }
+    }
+
+    /**
+     * 递归方式
+     *
+     * @param arr    数组
+     * @param index  要下沉的下标
+     * @param length 要调整的数组范围
+     */
+    public static void sink(int[] arr, int index, int length) {
+        int leftIndex = 2 * index + 1;
+        int rightIndex = 2 * index + 2;
+        int present = index;
+
+        if (leftIndex < length && arr[leftIndex] > arr[present]) {
+            present = leftIndex;
+        }
+        if (rightIndex < length && arr[rightIndex] > arr[present]) {
+            present = rightIndex;
+        }
+        if (present != index) {
+            swap(arr, present, index);
+            sink(arr, present, length);
         }
     }
 
