@@ -1,5 +1,7 @@
 package com.example.practice.two;
 
+import com.example.common.ListNode;
+
 /**
  * 输入一个链表，反转链表后，输出新链表的表头。
  */

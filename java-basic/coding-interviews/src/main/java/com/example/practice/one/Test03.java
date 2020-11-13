@@ -1,5 +1,7 @@
 package com.example.practice.one;
 
+import com.example.common.ListNode;
+
 import java.util.ArrayList;
 
 /**
@@ -8,24 +10,11 @@ import java.util.ArrayList;
  * date: 2019/6/17
  */
 public class Test03 {
-    public class ListNode {
-        int val;
-        ListNode next = null;
 
-        ListNode(int val) {
-            this.val = val;
-        }
-
-        ListNode(int val, ListNode next) {
-            this.val = val;
-            this.next = next;
-        }
-    }
-
-    private ListNode getListNode() {
-        ListNode n3 = new ListNode(3, null);
-        ListNode n2 = new ListNode(2, n3);
-        return new ListNode(1, n2);
+    private ListNode<Integer> getListNode() {
+        ListNode<Integer> n3 = new ListNode<>(3, null);
+        ListNode<Integer> n2 = new ListNode<>(2, n3);
+        return new ListNode<>(1, n2);
     }
 
     public static void main(String[] args) {
@@ -35,7 +24,7 @@ public class Test03 {
 
     // 递归
     private ArrayList<Integer> list = new ArrayList<>();
-    public ArrayList<Integer> printListFromTailToHead(ListNode listNode) {
+    public ArrayList<Integer> printListFromTailToHead(ListNode<Integer> listNode) {
         if (listNode != null) {
             printListFromTailToHead(listNode.next);
             list.add(listNode.val);
@@ -44,7 +33,7 @@ public class Test03 {
     }
 
     // 轮询加入List，倒序List
-    public ArrayList<Integer> printListFromTailToHead2(ListNode listNode) {
+    public ArrayList<Integer> printListFromTailToHead2(ListNode<Integer> listNode) {
         ArrayList<Integer> list = new ArrayList<>();
         while (listNode != null) {
             list.add(listNode.val);
