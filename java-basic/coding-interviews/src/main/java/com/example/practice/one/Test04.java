@@ -1,5 +1,7 @@
 package com.example.practice.one;
 
+import com.example.common.TreeNode;
+
 import java.util.Arrays;
 
 /**
@@ -12,16 +14,6 @@ import java.util.Arrays;
  * date: 2019/6/18
  */
 public class Test04 {
-
-    public class TreeNode {
-        int val;
-        TreeNode left;
-        TreeNode right;
-
-        TreeNode(int val) {
-            this.val = val;
-        }
-    }
 
     public static void main(String[] args) {
         Test04 t = new Test04();

@@ -1,5 +1,7 @@
 package com.example.leetcode;
 
+import com.example.common.TreeNode;
+
 import java.util.LinkedList;
 
 /**
@@ -175,21 +177,5 @@ public class L101SymmetricTree {
       nodes.push(q.left);
     }
     return true;
-  }
-
-  public static class TreeNode {
-    int val;
-    TreeNode left;
-    TreeNode right;
-
-    TreeNode(int val) {
-      this.val = val;
-    }
-
-    TreeNode(int val, TreeNode left, TreeNode right) {
-      this.val = val;
-      this.left = left;
-      this.right = right;
-    }
   }
 }
