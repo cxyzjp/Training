@@ -8,9 +8,7 @@
 │  └─ thrift						// thrift
 ├─ java-basic
 │  ├─ coding-interviews				// 剑指Offer练习、算法
-│  └─ concurrent					// 多线程练习
-│  ├─ jdk							// jdk源码
-│  ├─ jvm							// jvm资料
+│  └─ concurrent					// java基础练习
 ├─ spring
 │  ├─ spring-annotation				// 注解原理
 │  ├─ springboot-jpa				// SpringBoot JPA
