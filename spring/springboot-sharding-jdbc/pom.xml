@@ -27,7 +27,7 @@
 		<sharding-jdbc.version>2.0.3</sharding-jdbc.version>
 		<mybatis-spring.version>1.3.0</mybatis-spring.version>
 		<commons-dbcp.version>1.4</commons-dbcp.version>
-		<logback.version>1.1.6</logback.version>
+		<logback.version>1.2.0</logback.version>
 
 		<aliyun.oss.version>3.0.0</aliyun.oss.version>
 		<aliyun.mts.version>2.5.2</aliyun.mts.version>
