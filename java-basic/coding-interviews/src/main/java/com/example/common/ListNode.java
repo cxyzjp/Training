@@ -33,9 +33,20 @@ public class ListNode<T> {
     StringBuilder result = new StringBuilder();
     ListNode<T> nextNode = this;
     do {
-      result.append(nextNode.toString());
+      result.append(nextNode);
       nextNode = nextNode.next;
     } while (nextNode != null);
     System.out.println(result);
+  }
+
+  public static <T> ListNode<T> newListNode(T[] arr) {
+    ListNode<T> head = new ListNode<>(arr[0]);
+    ListNode<T> crr = head;
+    for (int i = 1; i < arr.length; i++) {
+      ListNode<T> next = new ListNode<>(arr[i]);
+      crr.next = next;
+      crr = next;
+    }
+    return head;
   }
 }
