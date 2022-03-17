@@ -8,9 +8,7 @@ import java.util.List;
 import java.util.Stack;
 
 public abstract class Offer06RevertLinkedList {
-  public int[] reversePrint(ListNode head) {
-    return null;
-  }
+  public abstract int[] reversePrint(ListNode head);
 
   private static class Solution1 extends Offer06RevertLinkedList {
     public int[] reversePrint(ListNode head) {

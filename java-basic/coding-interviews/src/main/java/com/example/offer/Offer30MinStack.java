@@ -11,19 +11,13 @@ import java.util.Stack;
  */
 public abstract class Offer30MinStack {
 
-  public void push(int x) {
-  }
+  public abstract void push(int x);
 
-  public void pop() {
-  }
+  public abstract void pop();
 
-  public int top() {
-    throw new IllegalArgumentException();
-  }
+  public abstract int top();
 
-  public int min() {
-    throw new IllegalArgumentException();
-  }
+  public abstract int min();
 
   static class MinStack1 extends Offer30MinStack {
     List<Integer> list;

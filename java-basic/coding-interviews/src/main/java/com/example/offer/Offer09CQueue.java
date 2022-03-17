@@ -7,12 +7,9 @@ import java.util.Stack;
  * 分别完成在队列尾部插入整数和在队列头部删除整数的功能。(若队列中没有元素，deleteHead 操作返回 -1 )
  */
 public abstract class Offer09CQueue {
-  public void appendTail(int value) {
-  }
+  public abstract void appendTail(int value);
 
-  public int deleteHead() {
-    return -1;
-  }
+  public abstract int deleteHead();
 
   public static class CQueue1 extends Offer09CQueue {
     Stack<Integer> s1, s2;
