@@ -62,6 +62,9 @@ public class TreeNode {
       int parentIndex = (i - 1) / 2;
       boolean isLeft = (i - 1) % 2 == 0;
       TreeNode parentNode = list.get(parentIndex);
+      if (parentNode == null) {
+        continue;
+      }
       if (isLeft) {
         parentNode.left = node;
       } else {
